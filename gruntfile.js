@@ -1,11 +1,15 @@
 module.exports = function(grunt) {
 
-	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+		jshint: {
+			files : 'js/*.js',
+			options : {
+			}
+		},
 		uglify: {
 			build: {
-				src: 'js/*.js',
+				src: ['js/*.js', 'js/libs/*.js'],
 				dest: 'public/assets/min.js'
 			}
 		},
@@ -17,8 +21,8 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			js: {
-				files: ['js/*.js'],
-				tasks: ['uglify'],
+				files: ['js/*.js', 'js/libs/*.js'],
+				tasks: ['jshint', 'uglify'],
 				options: {
 					spawn: false
 				}
@@ -33,10 +37,11 @@ module.exports = function(grunt) {
 		}
 	});
 
+	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('default', ['uglify', 'cssmin', 'watch']);
+	grunt.registerTask('default', ['jshint', 'uglify', 'cssmin', 'watch']);
 
 };
