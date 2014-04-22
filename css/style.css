@@ -1,0 +1,24 @@
+a{
+	text-decoration: none;
+}
+
+header{
+	background : #fff;
+	height : 50px;
+	border-bottom: 1px solid #d3d3d3;
+}
+
+#body_section {
+	text-align: center;
+	background : #f0f0f0;
+}
+
+#sign_in_button {
+	background : #cc181e;
+	color: #FFF;
+	font-size: 15px;
+	float: right;
+	margin-right: 20px;
+	margin-top: 10px;
+	box-shadow: 0 1px 0 rgba(204, 24, 30, 0.05);
+}

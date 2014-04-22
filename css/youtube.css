@@ -1,0 +1,28 @@
+/* youtube-inspired styles */
+
+*{
+	color : #333;
+	font-family: arial, sans-serif !important;
+}
+
+a, button, input[type="button"], input[type="submit"] {
+	cursor : pointer;
+}
+
+.red-text{
+	color : #cc181e;
+}
+
+.muted-text{
+	color : #adadad;
+}
+
+a:hover {
+	background : #444;
+}
+
+button {
+	padding : 5px 10px;
+	border : 1px solid #d3d3d3;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}

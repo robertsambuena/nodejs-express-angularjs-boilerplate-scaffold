@@ -9,7 +9,7 @@ var express = require('express'),
 console.log('initializing FREEDOM Frontend. ENV = ', process.env['NODE_ENV']);
 
 app.disable('x-powered-by');
-app.use(favicon(config.public_dir + '/public/assets/favicon.ico'));
+app.use(favicon(config.public_dir + '/public/assets/images/favicon.png'));
 app.use(compression());
 app.use(express.static(config.public_dir));
 app.listen(config.port);
