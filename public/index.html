@@ -5,21 +5,37 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link rel="shortcut icon" href="assets/images/favicon.png" />
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.1.2/nprogress.min.css" />
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
 		<link rel="stylesheet" href="assets/min.css" />
         <title>Freedom!</title>
     </head>
 
     <body>
 		<header>
-			<button id="sign_in_button" data-v="sign_in">Sign In!</button>
+			<div id="mast_div">
+				<img src="assets/images/freedom-nav-logo.png" class="wrapper" height="40"/>
+				<div class="wrapper">
+					<button id="collapse_button">
+						<i class="fa fa-bars fa-lg"></i><i class="fa fa-sort-asc"></i>
+					</button>
+				</div>
+				<div id="profile_nav_div">
+					<button id="sign_in_button" data-v="sign_in">Sign in</button>
+				</div>
+			</div>
 		</header>
 
 		<section id="body_section">
-
-			<img src="assets/images/freedom-logo.png"/>
 		</section>
 
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
 		<script type="text/javascript" src="assets/min.js"></script>
+
+		<script type="text/html" id="tmpl-profile-nav">
+			<span class="">{fname} {lname}</span>
+		</script>
     </body>
 
 </html>

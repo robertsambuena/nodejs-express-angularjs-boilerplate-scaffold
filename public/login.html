@@ -10,6 +10,11 @@
 
     <body>
 		Login successful
+
+		<script type="text/javascript">
+			var a = JSON.parse(decodeURIComponent(location.hash.substring(1)));
+			location.hash = '';
+		</script>		
     </body>
 
 </html>

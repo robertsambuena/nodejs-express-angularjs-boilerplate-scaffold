@@ -12,6 +12,9 @@ app.disable('x-powered-by');
 app.use(favicon(config.public_dir + '/public/assets/images/favicon.png'));
 app.use(compression());
 app.use(express.static(config.public_dir));
+app.use(function (req, res) {
+	res.redirect('/');
+});
 app.listen(config.port);
 
 console.log('Server listening on port : ', config.port);

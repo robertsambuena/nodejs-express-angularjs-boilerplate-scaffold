@@ -4,11 +4,12 @@ module.exports = function(grunt) {
 		jshint: {
 			files : 'js/*.js',
 			options : {
+				boss : true
 			}
 		},
 		uglify: {
 			build: {
-				src: ['js/*.js', 'js/libs/*.js'],
+				src: ['js/libs/*.js', 'js/*.js'],
 				dest: 'public/assets/min.js'
 			}
 		},

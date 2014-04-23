@@ -3,9 +3,63 @@ a{
 }
 
 header{
-	background : #fff;
+	min-width: 800px;
 	height : 50px;
-	border-bottom: 1px solid #d3d3d3;
+	background : #fff;
+	border-bottom: 1px solid #e8e8e8;
+	padding: 5px 30px;
+}
+
+.wrapper {
+	float: left;
+}
+
+#mast_div{
+	height: 40px;
+	margin: 8px auto;
+	line-height: 1;
+	position: relative;
+}
+
+#collapse_button{
+	padding: 10px;
+	margin: 5px 10px;
+	line-height: normal;
+	background: transparent;
+	vertical-align: middle;
+	display: inline-block;
+	border: none;
+}
+
+#collapse_button:hover{
+	border : 1px solid #d3d3d3;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+#collapse_button i{
+	color : #cc181e;
+	padding-right: 5px;
+	float: left;
+}
+
+#collapse_button i.fa-sort-asc{
+	margin-top: -2px;
+}
+
+#profile_nav_div{
+	float: right;
+}
+
+#sign_in_button {
+	line-height: 1;
+	border: 0;
+	margin: 5px 0;
+	padding: 0 10px;
+	height: 30px;
+	background : #1b7fcc;
+	color: #FFF;
+	font-size: 13px;
+	font-weight: bold;
 }
 
 #body_section {
@@ -13,12 +67,3 @@ header{
 	background : #f0f0f0;
 }
 
-#sign_in_button {
-	background : #cc181e;
-	color: #FFF;
-	font-size: 15px;
-	float: right;
-	margin-right: 20px;
-	margin-top: 10px;
-	box-shadow: 0 1px 0 rgba(204, 24, 30, 0.05);
-}
