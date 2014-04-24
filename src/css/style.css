@@ -1,3 +1,32 @@
+/* youtube-inspired styles */
+
+.yt, span{
+	color : #333;
+	font-family: arial, sans-serif;
+}
+
+a, button, input[type="button"], input[type="submit"] {
+	cursor : pointer;
+}
+
+.red-text{
+	color : #cc181e;
+}
+
+.muted-text{
+	color : #adadad;
+}
+
+a:hover {
+	background : #444;
+}
+
+
+
+
+
+
+
 a{
 	text-decoration: none;
 }

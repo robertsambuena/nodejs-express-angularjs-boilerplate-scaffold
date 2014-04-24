@@ -23,18 +23,20 @@ Directory Structure
 
 	config/
 		config.js			-- contains server configuration e.g. port, public directory
-	css/
-		*.css				-- stylesheets to be used
-	js/
-		libs/
-			*.js			-- JS libraries used
-		*.js				-- Custom scripts to be used
+	src/
+		css/
+			style.css		-- stylesheet to be used
+		js/
+			libs/			-- contains JS libraries to be used
+			script.js		-- Custom script to be used
+		index.html			--
 	public/
-		assets/
-			images			-- contains images used on the application
+		images/				-- contains images used on the application
+		css/
 			min.css			-- minified css from the css folder
-			min.js			-- minifed js from the js folder
-		index.html			-- main html file
+		js/
+			min.js			-- minified js from the js folder
+		index.html			-- minified form of index.html
 	server.js				-- contains script for running the web server
 	gruntfile.js			-- grunt config
 	.gitignore				-- list of ignored files
