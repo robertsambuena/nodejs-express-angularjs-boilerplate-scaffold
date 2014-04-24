@@ -23,7 +23,12 @@ module.exports = function(grunt) {
 			build: {
 				options: {
 					removeComments: true,
-					collapseWhitespace: true
+					collapseWhitespace: true,
+					collapseBooleanAttributes: true,
+					useShortDoctype: true,
+					removeRedundantAttributes: true,
+					removeOptionalTags: true,
+					removeEmptyAttributes: true
 				},
 				src: 'src/index.html',
 				dest: 'public/index.html'

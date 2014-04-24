@@ -37,8 +37,13 @@
 		/**
 			page callbacks
 		*/
+		register = function () {
+			var a = JSON.parse(decodeURIComponent(location.hash.substring(1))),
+				i;
+			for (i in a) document.getElementById(i).value = a[i];
+			location.hash = '';
+		}.
 		edit = function () {
-
 		},
 		overview = function () {
 			var mapData = function (err, data, code) {
@@ -71,6 +76,7 @@
 	/**
 		Setup Pages
 	**/
+	page('register', register);
 	page('edit', edit);
 	page('overview', overview);
 	page('*', login);
