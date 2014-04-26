@@ -1,6 +1,13 @@
+html, body{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
 /* youtube-inspired styles */
 
-.yt, span{
+.yt, span, a{
 	color : #333;
 	font-family: arial, sans-serif;
 }
@@ -16,13 +23,13 @@ a, button, input[type="button"], input[type="submit"] {
 .muted-text{
 	color : #adadad;
 }
-
-a:hover {
-	background : #444;
+.clearfix{
+	clear: both;
 }
-
-
-
+.button{
+	border: 1px solid #CCC;
+	padding: 5px 10px;
+}
 
 
 
@@ -57,12 +64,16 @@ header{
 	background: transparent;
 	vertical-align: middle;
 	display: inline-block;
-	border: none;
+	border : 1px solid transparent;
 }
 
 #collapse_button:hover{
 	border : 1px solid #d3d3d3;
 	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+#collapse_button.collapsed i{
+	color : #aaa;
 }
 
 #collapse_button i{
@@ -77,6 +88,7 @@ header{
 
 #profile_nav_div{
 	float: right;
+	line-height: 1;
 }
 
 #sign_in_button {
@@ -89,10 +101,92 @@ header{
 	color: #FFF;
 	font-size: 13px;
 	font-weight: bold;
+	vertical-align: middle;
 }
+
+#profile_email_span{
+	font-size: 11px;
+	color: #666;
+	vertical-align: middle;
+}
+
+#profile_avatar_img{
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	vertical-align: middle;
+}
+
+#bell_icon {
+	color: #888;
+	vertical-align: middle;
+}
+
+#menu_section{
+	width: 225px;
+	float: left;
+	position: absolute;
+	background: #FFF;
+}
+
+#menu_ul li i{
+	width: 20px;
+	color: #AAA;
+}
+#menu_ul li a{
+	padding: 10px 30px;
+	display: block;
+	font-family: arial, sans-serif;
+	border-right: 1px solid #e8e8e8;
+	font-size: 12px;
+}
+#menu_ul li a:hover, #menu_ul li a.active{
+	font-weight: bold;
+	border-right: none;
+	background: #444;
+	color: #FFF;
+}
+#menu_ul li a.active{
+	background: #cc181e;
+}
+#menu_ul li a:hover i, #menu_ul li a.active i{
+	color: #FFF;
+}
+
+
 
 #body_section {
-	text-align: center;
 	background : #f0f0f0;
+	width: 100%;
+	min-height: 500px;
 }
 
+#content_div_wrapper{
+	margin: 0 auto;
+	padding-left: 225px;
+	width: calc(100% - 225px);
+}
+
+#content_div{
+	margin: 0 auto;
+	padding: 20px 10px;
+	background: #fff;
+	width: calc(100% - 40px);
+	min-height: 200px;
+	border: 1px solid #e8e8e8;
+	border-top: 0;
+}
+
+#profile_div{
+	font-family: arial, sans-serif;
+	font-size: 12px;
+	line-height: 2.2;
+}
+#profile_div img{
+	float: left;
+	margin-right: 10px;
+	border: 1px solid #CCC;
+}
+#profile_name_span{
+	font-weight: bold;
+	font-size: 22px;
+}

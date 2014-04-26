@@ -4,18 +4,18 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <link rel="shortcut icon" href="images/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.png" />
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.1.2/nprogress.min.css" />
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
-		<link rel="stylesheet" href="css/min.css" />
+		<link rel="stylesheet" href="/min.css" />
         <title>Freedom!</title>
     </head>
 
     <body>
 		<header>
 			<div id="mast_div">
-				<img src="images/freedom-nav-logo.png" class="wrapper" height="33" width="115"/>
+				<img src="/freedom-nav-logo.png" class="wrapper" height="33" width="115"/>
 				<div class="wrapper">
 					<button id="collapse_button">
 						<i class="fa fa-bars fa-lg"></i><i class="fa fa-sort-asc"></i>
@@ -27,34 +27,81 @@
 			</div>
 		</header>
 
-		<section id="body_section">
+		<section id="menu_section">
+			<nav>
+				<ul id="menu_ul">
+					<li>
+						<a id="overview_a" href="/overview">
+							<i class="fa fa-home fa-lg"></i> Overview
+						</a>
+					</li>
+					<li>
+						<a id="profile_a" href="/profile">
+							<i class="fa fa-user fa-lg"></i> You
+						</a>
+					</li>
+					<li>
+						<a id="about_a" href="/about">
+							<i class="fa fa-info-circle fa-lg"></i> About
+						</a>
+					</li>
+					<li>
+						<button id="choose_class_button">Choose your class</button>
+					</li>
+				</ul>
+			</nav>
 		</section>
 
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
-		<script type="text/javascript" src="js/min.js"></script>
+		<section id="body_section">
+			<div id="content_div_wrapper">
+				<div id="content_div"></div>
+			</div>
+		</section>
 
-		<template type="text/html" id="tmpl-profile-nav">
-			<span class="">{fname} {lname}</span>
+		<template id="profile_nav_tmpl">
+			<span id="profile_email_span">{email}</span>
+			<i id="bell_icon" class="fa fa-bell-o fa-lg"></i>
+			<img id="profile_avatar_img" src="{avatar}" width="27px" height="27px"/>
 		</template>
-		<template type="text/html" id="tmpl-edit-profile">
-			<form method="post" action="http://localhost:8000/register">
-				<input type="date" name="birthdate" /><br />
-				Refresh Token<input type="text" name="google_refresh_token" id="google_refresh_token"/><br />
-				F Name<input type="text" name="fname" id="fname"/><br />
-				L Name<input type="text" name="lname" id="lname"/><br />
-				Email<input type="text" name="email" id="email"/> <br />
-				Avatar<input type="text" name="avatar" id="avatar"/> <br />
-				Skype<input type="text" name="skype"/> <br />
-				Street Address<input type="text" name="street_address"/> <br />
-				City<input type="text" name="city"/> <br />
-				State<input type="text" name="state"/> <br />
-				Country<input type="text" name="country"/> <br />
-				Postal code<input type="text" name="postal_code"/> <br />
-				Referrer<input type="text" name="referrer"/> <br />
-				<input type="hidden" name="password" value=" "/> <br />
-				<input type="submit" value="Submit" />
+
+		<template id="profile_tmpl">
+			<div id="profile_div">
+				<img src="{avatar}" width="128px" height="128px" alt="{name}'s picture"/>
+				<div>
+					<span id="profile_name_span">{name}</span><br />
+					Badges : <br />
+					Class : {class} <br />
+					<a href="/profile/edit" id="edit_profile_button" class="button">Edit Profile</a>
+				</div>
+				<br class="clearfix"/>
+				<ul>
+					<li>Info</li>
+					<li>Class</li>
+					<li>Recruits</li>
+				<ul>
+			</div>
+		</template>
+
+		<template id="edit_profile_tmpl">
+			<form id="edit_profile_form">
+				First Name<input type="text" name="fname" value="{fname}"/><br />
+				Last Name<input type="text" name="lname" value="{lname}"/><br />
+				Skype<input type="text" name="skype" value="{skype}"/> <br />
+				Street Address<input type="text" name="street_address" value="{street_address}"/> <br />
+				City<input type="text" name="city" value="{city}"/> <br />
+				State<input type="text" name="state" value="{state}"/> <br />
+				Country<input type="text" name="country" value="{country}"/> <br />
+				Postal code<input type="text" name="postal_code" value="{postal_code}"/> <br />
+				Avatar<input type="text" name="avatar" value="{avatar}"/> <br />
+				Facebook<input type="text" name="facebook" value="{facebook}"/> <br />
+				Twitter<input type="text" name="twitter" value="{twitter}"/> <br />
+				Phone<input type="text" name="phone" value="{phone}"/> <br />
+				<input type="submit" name="submit" value="Submit" />
 			</form>
 		</template>
+
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
+		<script type="text/javascript" src="/min.js"></script>
     </body>
 
 </html>

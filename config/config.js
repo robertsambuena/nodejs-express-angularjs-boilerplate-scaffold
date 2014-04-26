@@ -3,12 +3,16 @@ var path = require('path'),
 		testing : {
 			env : 'testing',
 			port : 8001,
-			public_dir : path.normalize(__dirname + '/../public')
+			public_dir : path.normalize(__dirname + '/../public'),
+			images_dir : path.normalize(__dirname + '/../images'),
+			src_dir : path.normalize(__dirname + '/../src')
 		},
 		development : {
 			env : 'development',
 			port : 8001,
 			public_dir : path.normalize(__dirname + '/../public'),
+			images_dir : path.normalize(__dirname + '/../images'),
+			src_dir : path.normalize(__dirname + '/../src')
 		},
 		staging : {
 		},

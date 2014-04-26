@@ -1,7 +1,6 @@
 npm-debug.log
 node_modules
-public/css/min.css
-public/js/min.js
-public/index.html
+src/min.css
+src/min.js
 
 trash

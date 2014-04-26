@@ -31,12 +31,10 @@ Directory Structure
 			script.js		-- Custom script to be used
 		index.html			--
 	public/
-		images/				-- contains images used on the application
-		css/
-			min.css			-- minified css from the css folder
-		js/
-			min.js			-- minified js from the js folder
+		min.css				-- minified css from the css folder
+		min.js				-- minified js from the js folder
 		index.html			-- minified form of index.html
+	images/					-- contains images used on the application
 	server.js				-- contains script for running the web server
 	gruntfile.js			-- grunt config
 	.gitignore				-- list of ignored files
