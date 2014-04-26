@@ -17,13 +17,11 @@
 			<div id="mast_div">
 				<img src="/freedom-nav-logo.png" class="wrapper" height="33" width="115"/>
 				<div class="wrapper">
-					<button id="collapse_button">
+					<button id="collapse_button" class="collapsed">
 						<i class="fa fa-bars fa-lg"></i><i class="fa fa-sort-asc"></i>
 					</button>
 				</div>
-				<div id="profile_nav_div">
-					<button id="sign_in_button" data-v="sign_in">Sign in</button>
-				</div>
+				<div id="profile_nav_div"></div>
 			</div>
 		</header>
 
@@ -58,10 +56,14 @@
 			</div>
 		</section>
 
+		<template id="signin_tmpl">
+			<button id="sign_in_button" data-v="sign_in">Sign in</button>
+		</template>
+
 		<template id="profile_nav_tmpl">
 			<span id="profile_email_span">{email}</span>
 			<i id="bell_icon" class="fa fa-bell-o fa-lg"></i>
-			<img id="profile_avatar_img" src="{avatar}" width="27px" height="27px"/>
+			<img id="profile_avatar_img" title="Logout" src="{avatar}" width="27px" height="27px"/>
 		</template>
 
 		<template id="profile_tmpl">

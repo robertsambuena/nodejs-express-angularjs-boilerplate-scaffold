@@ -47,10 +47,10 @@
 			page callbacks
 		*/
 		register = function () {
-			var a = JSON.parse(decodeURIComponent(location.hash.substring(1))),
-				i;
-			for (i in a) _$('#' + i).value = a[i];
-			location.hash = '';
+			console.dir(Cookies.get('data'));
+		},
+		error = function () {
+			console.dir(Cookies.get('error'));
 		},
 		profile = function (ctx) {
 			if (!user_info) return page.show('login');
@@ -92,8 +92,6 @@
 			}
 			NProgress.done();
 		},
-		edit = function () {
-		},
 		overview = function () {
 			_$('.active')[0] && (_$('.active')[0].className = '');
 			_$('#overview_a').className = 'active';
@@ -101,9 +99,17 @@
 			NProgress.done();
 		},
 		login = function () {
-
+			content_div.innerHTML = '';
 		},
 		logout = function () {
+			ajax('GET', api + 'logout', function (err, data) {
+				var temp = _$('#collapse_button');
+				user_info = null;
+				setProfileNav();
+				temp.className = '';
+				temp.click();
+				page.show('/');
+			});
 
 		},
 
@@ -111,10 +117,18 @@
 			templates
 		*/
 		setProfileNav = function () {
-			_$('#profile_nav_div').innerHTML = t('profile_nav', {
-				email : user_info.email,
-				avatar : user_info.profile_info.avatar
-			});
+			if (user_info) {
+				_$('#profile_nav_div').innerHTML = t('profile_nav', {
+					email : user_info.email,
+					avatar : user_info.profile_info.avatar
+				});
+				_$('#profile_avatar_img').addEventListener('click', logout, true);
+			} else {
+				_$('#profile_nav_div').innerHTML = t('signin');
+				_$('#sign_in_button').addEventListener('click', function () {
+					root.location = api + 'auth/google';
+				}, true);
+			}
 		},
 
 		/**
@@ -140,6 +154,28 @@
 				ret[f[i].name] = f[i].value;
 			}
 			return ret;
+		},
+
+		start = function () {
+			if (Cookies.get('access_token')) {
+				ajax('GET', api + 'user', function (err, data) {
+					if (err) {
+						console.dir(err);
+						logout();
+					}
+					else {
+						user_info = data;
+						_$('#collapse_button').click();
+						page.show(root.location.pathname === '/' ? '/overview'
+							: root.location.pathname);
+					}
+					setProfileNav();
+				});
+			}
+			else {
+				page.show(root.location.pathname);
+				setProfileNav();
+			}
 		}
 		;
 
@@ -150,14 +186,12 @@
 	page('/profile/:action?', profile);
 	page('/overview', overview);
 	page('/login', login);
+	page('/error', error);
 	page('*', login);
 
 	/**
 		Bind events
 	**/
-	_$('#sign_in_button').addEventListener('click', function () {
-		root.location = api + 'auth/google';
-	}, true);
 	_$('#collapse_button').addEventListener('click', function (e) {
 		var temp = _$('#content_div_wrapper').style,
 			button = _$('#collapse_button');
@@ -169,30 +203,17 @@
 		} else {
 			button.className = 'collapsed';
 			_$('#menu_section').style.display = 'none';
-			temp.width = root.innerWidth + 'px';
+			temp.width = '100%';
 			temp.paddingLeft = '0px';
 		}
 	}, true);
 
+
+	/**
+		configure libraries then start
+	*/
 	NProgress.configure({ showSpinner: false });
 	preventAllReloads();
-
-	if (typeof Cookies !== 'undefined' && Cookies.get('access_token')) {
-		ajax('GET', api + 'user', function (err, data) {
-			if (err) {
-				console.dir(err);
-				logout();
-			}
-			else {
-				user_info = data;
-				setProfileNav();
-				console.dir(root.location.pathname);
-				page.show(root.location.pathname === '/' ? '/overview'
-					: root.location.pathname);
-			}
-		});
-	} else {
-		page.show(root.location.pathname);
-	}
+	start();
 
 } (this) );
