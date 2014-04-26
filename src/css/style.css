@@ -12,7 +12,7 @@ html, body{
 	font-family: arial, sans-serif;
 }
 
-a, button, input[type="button"], input[type="submit"] {
+a, button, input[type="button"], input[type="submit"] , #logo_img{
 	cursor : pointer;
 }
 
@@ -87,20 +87,24 @@ header{
 
 #profile_nav_div{
 	float: right;
-	line-height: 1;
 }
 
-#sign_in_button {
-	line-height: 1;
+#sign_in_a, #register_a{
+	display: inline-block;
 	border: 0;
-	margin: 5px 0;
-	padding: 0 10px;
-	height: 30px;
-	background : #1b7fcc;
+	padding: 10px 10px;
 	color: #FFF;
 	font-size: 13px;
 	font-weight: bold;
 	vertical-align: middle;
+}
+
+#register_a{
+	background : #1b7fcc;
+}
+
+#sign_in_a{
+	background: #cc181e;
 }
 
 #profile_email_span{
@@ -190,6 +194,7 @@ header{
 	float: left;
 	margin-right: 10px;
 	border: 1px solid #CCC;
+	cursor: pointer;
 }
 #profile_name_span{
 	font-weight: bold;

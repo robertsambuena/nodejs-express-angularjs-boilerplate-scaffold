@@ -47,13 +47,40 @@
 			page callbacks
 		*/
 		register = function () {
-			console.dir(Cookies.get('data'));
+			// var data = JSON.parse(Cookies.get('data'));
+			var data = !1;
+			if (!data) {
+				data = {};
+				data.fname = data.lname = data.email = data.avatar = data.google_refresh_token = '';
+			}
+			data.referrer = '';
+			content_div.innerHTML = t('registration', data);
+			_$('#registration_form').addEventListener('submit', function (e) {
+				var form = e.target,
+					data = serialize(form);
+				e.preventDefault();
+				console.dir(data);
+				// validate data
+				ajax('POST', api + 'register', function (err, data, status) {
+					if (err) {
+						alert('Registration failed :( Please try again');
+						console.dir(err);
+						console.dir(data);
+						console.dir(status);
+					}
+					else {
+						alert('Registration successful :)');
+					}
+				}, data);
+				return false;
+			}, true);
 		},
 		error = function () {
 			console.dir(Cookies.get('error'));
 		},
 		profile = function (ctx) {
-			if (!user_info) return page.show('login');
+			if (typeof user_info === 'undefined' || !user_info)
+				return logout();
 			_$('.active')[0] && (_$('.active')[0].className = '');
 			_$('#profile_a').className = 'active';
 			if (ctx.params.action === 'edit') {
@@ -82,21 +109,18 @@
 					}, data);
 					return false;
 				}, true);
-			} else {
+			}
+			else
 				content_div.innerHTML = t('profile', {
 					name : user_info.profile_info.fname + ' ' + user_info.profile_info.lname,
 					avatar : user_info.profile_info.avatar,
 					class : user_info.class || 'Newbie'
 				});
-				preventAllReloads('#edit_profile_button');
-			}
-			NProgress.done();
 		},
 		overview = function () {
 			_$('.active')[0] && (_$('.active')[0].className = '');
 			_$('#overview_a').className = 'active';
 			content_div.innerHTML = '';
-			NProgress.done();
 		},
 		login = function () {
 			content_div.innerHTML = '';
@@ -123,29 +147,16 @@
 					avatar : user_info.profile_info.avatar
 				});
 				_$('#profile_avatar_img').addEventListener('click', logout, true);
-			} else {
-				_$('#profile_nav_div').innerHTML = t('signin');
-				_$('#sign_in_button').addEventListener('click', function () {
-					root.location = api + 'auth/google';
-				}, true);
 			}
+			else
+				_$('#profile_nav_div').innerHTML = t('signin', {
+					api : api
+				});
 		},
 
 		/**
 			setup functions
 		*/
-		preventAllReloads = function (e) {
-			var a = _$(e || 'a'),
-				i = (a = a.length ? a : [a]).length,
-				falseF = function (e) {
-					e.preventDefault();
-					NProgress.start();
-					page.show(e.target.pathname);
-					return false;
-				};
-			while (i--)
-				a[i].addEventListener('click', falseF, true);
-		},
 
 		serialize = function (f) {
 			var i = f.length,
@@ -208,12 +219,19 @@
 		}
 	}, true);
 
+	doc.body.addEventListener('click', function (e) {
+		var href = e.target.getAttribute('href');
+		if (href && !~href.indexOf('http://')) {
+			e.preventDefault();
+			page.show(href);
+			return false;
+		}
+	}, true);
 
 	/**
 		configure libraries then start
 	*/
 	NProgress.configure({ showSpinner: false });
-	preventAllReloads();
 	start();
 
 } (this) );

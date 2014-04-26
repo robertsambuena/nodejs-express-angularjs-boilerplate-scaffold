@@ -15,7 +15,7 @@
     <body>
 		<header>
 			<div id="mast_div">
-				<img src="/freedom-nav-logo.png" class="wrapper" height="33" width="115"/>
+				<img id="logo_img" href="/" src="/freedom-nav-logo.png" class="wrapper" height="33px" width="115px"/>
 				<div class="wrapper">
 					<button id="collapse_button" class="collapsed">
 						<i class="fa fa-bars fa-lg"></i><i class="fa fa-sort-asc"></i>
@@ -57,7 +57,32 @@
 		</section>
 
 		<template id="signin_tmpl">
-			<button id="sign_in_button" data-v="sign_in">Sign in</button>
+			<a id="register_a" href="/register">Register</a>
+			<a id="sign_in_a" href="{api}auth/google">Sign in using Google</a>
+		</template>
+
+		<template id="registration_tmpl">
+			<form id="registration_form">
+				Email<input type="email" name="email" value="{email}" required="required"/><br />
+				First Name<input type="text" name="fname" value="{fname}" required="required"/><br />
+				Last Name<input type="text" name="lname" value="{lname}" required="required"/><br />
+				Password<input type="text" name="password" required="required"/><br />
+				Confirm Password<input type="text" name="password2" required="required"/><br />
+				Avatar<input type="text" name="avatar" value="{avatar}"/> <br />
+				Birthdate<input type="date" name="birthdate" required="required"/> <br />
+				Skype<input type="text" name="skype" /> <br />
+				Street Address<input type="text" name="street_address" /> <br />
+				City<input type="text" name="city" /> <br />
+				State<input type="text" name="state" /> <br />
+				Country<input type="text" name="country" /> <br />
+				Postal code<input type="text" name="postal_code" /> <br />
+				Facebook<input type="text" name="facebook" /> <br />
+				Twitter<input type="text" name="twitter" /> <br />
+				Phone<input type="text" name="phone" /> <br />
+				<input type="hidden" name="google_refresh_token" value="{google_refresh_token}"/>
+				<input type="hidden" name="referrer" value="{referrer}"/>
+				<input type="submit" name="submit" value="Submit" />
+			</form>
 		</template>
 
 		<template id="profile_nav_tmpl">
