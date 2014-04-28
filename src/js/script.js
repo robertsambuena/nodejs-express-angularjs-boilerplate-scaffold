@@ -3,28 +3,6 @@
 	var user_info,
 		doc = root.document,
 		api = 'http://localhost:8000/',
-		ajax = function (method, url, cb, payload) {
-			var req = new XMLHttpRequest();
-			NProgress.start();
-			req.open(method, url, true);
-			req.withCredentials = true;
-			req.setRequestHeader('Content-Type', 'application/json');
-			req.onreadystatechange = function () {
-				var data;
-				if (req.readyState === 4) {
-					data = JSON.parse(req.responseText);
-					NProgress.done();
-					if (req.status === 200)
-						return cb(null, data);
-					cb(data.data || data.message || req.responseText, null, req.status);
-				}
-			};
-			req.onerror = function (err) {
-				NProgress.done();
-				cb(err, null, 500);
-			};
-			req.send(JSON.stringify(payload));
-		},
 		_$ = function (s) {
 			if (s[0] === '#') return doc.getElementById(s.substring(1));
 			return doc.querySelectorAll(s);
@@ -47,10 +25,12 @@
 			page callbacks
 		*/
 		register = function () {
-			// var data = JSON.parse(Cookies.get('data'));
-			var data = !1;
+			var data;
+
+			data = (data = Cookies.get('data'))
+				? JSON.parse(data)
+				: {};
 			if (!data) {
-				data = {};
 				data.fname = data.lname = data.email = data.avatar = data.google_refresh_token = '';
 			}
 			data.referrer = '';
@@ -61,17 +41,15 @@
 				e.preventDefault();
 				console.dir(data);
 				// validate data
-				ajax('POST', api + 'register', function (err, data, status) {
-					if (err) {
+				curl.post(api + 'register')
+					.send(data)
+					.then(function (data) {
+						alert('Registration successful :)');
+					})
+					.onerror(function (err) {
 						alert('Registration failed :( Please try again');
 						console.dir(err);
-						console.dir(data);
-						console.dir(status);
-					}
-					else {
-						alert('Registration successful :)');
-					}
-				}, data);
+					});
 				return false;
 			}, true);
 		},
@@ -79,6 +57,7 @@
 			console.dir(Cookies.get('error'));
 		},
 		profile = function (ctx) {
+			console.dir(user_info);
 			if (typeof user_info === 'undefined' || !user_info)
 				return logout();
 			_$('.active')[0] && (_$('.active')[0].className = '');
@@ -102,11 +81,18 @@
 					var form = e.target,
 						data = serialize(form);
 					e.preventDefault();
-					console.dir(data);
-					ajax('PUT', api + 'user', function (ret) {
-						console.dir(ret);
-						alert('Update successful :)');
-					}, data);
+
+					//validate data
+
+					curl.put(api + 'user')
+						.send(data)
+						.then(function (data) {
+							user_info = data.user_data;
+							alert('Update successful :)');
+						})
+						.onerror(function (err) {
+							alert('Update failed :(');
+						});
 					return false;
 				}, true);
 			}
@@ -122,26 +108,36 @@
 			_$('#overview_a').className = 'active';
 			content_div.innerHTML = '';
 		},
-		login = function () {
+		welcome = function () {
 			content_div.innerHTML = '';
 		},
+		about = function () {
+			_$('.active')[0] && (_$('.active')[0].className = '');
+			_$('#about_a').className = 'active';
+			content_div.innerHTML = '';
+		},
+		choose = function () {
+			_$('.active')[0] && (_$('.active')[0].className = '');
+			_$('#choose_a').className = 'active';
+			content_div.innerHTML = t('choose');
+		},
 		logout = function () {
-			ajax('GET', api + 'logout', function (err, data) {
-				var temp = _$('#collapse_button');
-				user_info = null;
-				setProfileNav();
-				temp.className = '';
-				temp.click();
-				page.show('/');
-			});
-
+			curl.get(api + 'logout')
+				.finally(function () {
+					var temp = _$('#collapse_button');
+					user_info = null;
+					setProfileNav();
+					temp.className = '';
+					temp.click();
+					page.show('/');
+				});
 		},
 
 		/**
 			templates
 		*/
 		setProfileNav = function () {
-			if (user_info) {
+			if (typeof user_info !== 'undefined' || !user_info) {
 				_$('#profile_nav_div').innerHTML = t('profile_nav', {
 					email : user_info.email,
 					avatar : user_info.profile_info.avatar
@@ -149,9 +145,7 @@
 				_$('#profile_avatar_img').addEventListener('click', logout, true);
 			}
 			else
-				_$('#profile_nav_div').innerHTML = t('signin', {
-					api : api
-				});
+				_$('#profile_nav_div').innerHTML = t('signin', { api : api });
 		},
 
 		/**
@@ -168,21 +162,17 @@
 		},
 
 		start = function () {
-			if (Cookies.get('access_token')) {
-				ajax('GET', api + 'user', function (err, data) {
-					if (err) {
-						console.dir(err);
-						logout();
-					}
-					else {
+			if (Cookies.get('access_token'))
+				curl.to(api + 'user')
+					.then(function (data) {
 						user_info = data;
 						_$('#collapse_button').click();
-						page.show(root.location.pathname === '/' ? '/overview'
+						page.show(root.location.pathname === '/'
+							? '/overview'
 							: root.location.pathname);
-					}
-					setProfileNav();
-				});
-			}
+					})
+					.onerror(logout)
+					.finally(setProfileNav);
 			else {
 				page.show(root.location.pathname);
 				setProfileNav();
@@ -196,9 +186,10 @@
 	page('/register', register);
 	page('/profile/:action?', profile);
 	page('/overview', overview);
-	page('/login', login);
+	page('/about', about);
+	page('/choose', choose);
 	page('/error', error);
-	page('*', login);
+	page('*', welcome);
 
 	/**
 		Bind events

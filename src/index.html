@@ -44,7 +44,7 @@
 						</a>
 					</li>
 					<li>
-						<button id="choose_class_button">Choose your class</button>
+						<a id="choose_a" class="button" href="/choose">Choose your class</a>
 					</li>
 				</ul>
 			</nav>
@@ -125,6 +125,14 @@
 				Phone<input type="text" name="phone" value="{phone}"/> <br />
 				<input type="submit" name="submit" value="Submit" />
 			</form>
+		</template>
+
+		<template id="choose_tmpl">
+			So... what you wannabe?
+			<br /><br /><br />
+			<a href="/partner" class="button">Partner</a>
+			<br /><br /><br />
+			<a href="/staff" class="button">Staff</a>
 		</template>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>

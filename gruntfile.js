@@ -4,6 +4,7 @@ module.exports = function(grunt) {
 		jshint: {
 			files : 'src/js/*.js',
 			options : {
+				laxbreak: true,
 				expr: true,
 				boss : true
 			}
