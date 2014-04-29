@@ -111,7 +111,7 @@
 		overview = function () {
 			_$('.active')[0] && (_$('.active')[0].className = '');
 			_$('#overview_a').className = 'active';
-			content_div.innerHTML = '';
+			content_div.innerHTML = t('overview');
 		},
 		welcome = function () {
 			content_div.innerHTML = '';
@@ -119,7 +119,7 @@
 		about = function () {
 			_$('.active')[0] && (_$('.active')[0].className = '');
 			_$('#about_a').className = 'active';
-			content_div.innerHTML = '';
+			content_div.innerHTML = t('about');
 		},
 		choose = function () {
 			_$('.active')[0] && (_$('.active')[0].className = '');
@@ -139,7 +139,8 @@
 		channels = function () {
 			var data = Cookies.get('channels');
 			if (user_info) {
-				Cookies.expire('channels');
+				// just for now
+				// Cookies.expire('channels');
 				if (data) {
 					data = JSON.parse(data);
 					user_info.channels = data;
@@ -147,7 +148,7 @@
 				content_div.innerHTML = t('channels', {api : api});
 				console.dir(user_info.channels);
 				if (user_info.channels) {
-					content_div.innerHTML += t('channel_list', {data : JSON.stringify(user_info.channels)});
+					content_div.innerHTML += t('channel_list', {data : JSON.stringify(user_info.channels, null, 4)});
 				}
 			}
 			else
