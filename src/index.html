@@ -130,9 +130,31 @@
 		<template id="choose_tmpl">
 			So... what you wannabe?
 			<br /><br /><br />
-			<a href="/partner" class="button">Partner</a>
+			<a href="/partner/contract" class="button">Partner</a>
 			<br /><br /><br />
 			<a href="/staff" class="button">Staff</a>
+		</template>
+
+		<template id="partner_contract_tmpl">
+			This is a contract...
+			Lorem ipsum blablabla.
+			<br /><br /><br /><br />
+			<a href="/channels" class="button">I accept</a>
+			<br /><br /><br />
+			<a href="/partner/decline" class="button">Nope</a>
+		</template>
+
+		<template id="channels_tmpl">
+			<a href="{api}channel/add" class="button">Add Channel</a>
+		</template>
+
+		<template id="channel_list_tmpl">
+			<br /><br /><br /><br />
+			Your channels :
+			<br />
+			<pre>
+{data}
+			</pre>
 		</template>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>

@@ -15,10 +15,15 @@
 			return s;
 		},
 
+
+
+
 		/**
 			cached DOM elements
 		*/
 		content_div = _$('#content_div'),
+
+
 
 
 		/**
@@ -30,9 +35,10 @@
 			data = (data = Cookies.get('data'))
 				? JSON.parse(data)
 				: {};
-			if (!data) {
+			if (!data)
 				data.fname = data.lname = data.email = data.avatar = data.google_refresh_token = '';
-			}
+
+			Cookies.expire('data');
 			data.referrer = '';
 			content_div.innerHTML = t('registration', data);
 			_$('#registration_form').addEventListener('submit', function (e) {
@@ -57,8 +63,7 @@
 			console.dir(Cookies.get('error'));
 		},
 		profile = function (ctx) {
-			console.dir(user_info);
-			if (typeof user_info === 'undefined' || !user_info)
+			if (!user_info)
 				return logout();
 			_$('.active')[0] && (_$('.active')[0].className = '');
 			_$('#profile_a').className = 'active';
@@ -121,6 +126,33 @@
 			_$('#choose_a').className = 'active';
 			content_div.innerHTML = t('choose');
 		},
+		partner = function (ctx) {
+			switch (ctx.params.action) {
+				case 'contract':
+					content_div.innerHTML = t('partner_contract');
+					break;
+				case 'decline':
+					content_div.innerHTML = 'Awww :( sad';
+					break;
+			}
+		},
+		channels = function () {
+			var data = Cookies.get('channels');
+			if (user_info) {
+				Cookies.expire('channels');
+				if (data) {
+					data = JSON.parse(data);
+					user_info.channels = data;
+				}
+				content_div.innerHTML = t('channels', {api : api});
+				console.dir(user_info.channels);
+				if (user_info.channels) {
+					content_div.innerHTML += t('channel_list', {data : JSON.stringify(user_info.channels)});
+				}
+			}
+			else
+				logout();
+		},
 		logout = function () {
 			curl.get(api + 'logout')
 				.finally(function () {
@@ -133,11 +165,14 @@
 				});
 		},
 
+
+
+
 		/**
 			templates
 		*/
 		setProfileNav = function () {
-			if (typeof user_info !== 'undefined' || !user_info) {
+			if (user_info) {
 				_$('#profile_nav_div').innerHTML = t('profile_nav', {
 					email : user_info.email,
 					avatar : user_info.profile_info.avatar
@@ -148,16 +183,20 @@
 				_$('#profile_nav_div').innerHTML = t('signin', { api : api });
 		},
 
+
+
+
 		/**
 			setup functions
 		*/
 
+
+
 		serialize = function (f) {
 			var i = f.length,
 				ret = {};
-			while (i--) {
+			while (i--)
 				ret[f[i].name] = f[i].value;
-			}
 			return ret;
 		},
 
@@ -180,6 +219,9 @@
 		}
 		;
 
+
+
+
 	/**
 		Setup Pages
 	**/
@@ -188,8 +230,13 @@
 	page('/overview', overview);
 	page('/about', about);
 	page('/choose', choose);
+	page('/partner/:action', partner);
+	page('/channels', channels);
 	page('/error', error);
 	page('*', welcome);
+
+
+
 
 	/**
 		Bind events
@@ -210,6 +257,11 @@
 		}
 	}, true);
 
+
+
+
+
+
 	doc.body.addEventListener('click', function (e) {
 		var href = e.target.getAttribute('href');
 		if (href && !~href.indexOf('http://')) {
@@ -218,6 +270,9 @@
 			return false;
 		}
 	}, true);
+
+
+
 
 	/**
 		configure libraries then start
