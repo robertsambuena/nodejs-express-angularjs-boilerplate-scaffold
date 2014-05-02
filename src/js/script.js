@@ -29,14 +29,23 @@
 		/**
 			page callbacks
 		*/
+		activateLink = function (ctx, next) {
+			var temp = _$('[href="/' + ctx.path.split('/')[1] + '"]')[0];
+			_$('.active')[0] && (_$('.active')[0].className = '');
+			temp && (temp.className = 'active');
+			next();
+		},
 		register = function () {
 			var data;
 
 			data = (data = Cookies.get('data'))
 				? JSON.parse(data)
-				: {};
-			if (!data)
+				: false;
+
+			if (!data) {
+				data = {};
 				data.fname = data.lname = data.email = data.avatar = data.google_refresh_token = '';
+			}
 
 			Cookies.expire('data');
 			data.referrer = '';
@@ -65,8 +74,6 @@
 		profile = function (ctx) {
 			if (!user_info)
 				return logout();
-			_$('.active')[0] && (_$('.active')[0].className = '');
-			_$('#profile_a').className = 'active';
 			if (ctx.params.action === 'edit') {
 				content_div.innerHTML = t('edit_profile', {
 					fname : user_info.profile_info.fname,
@@ -109,46 +116,72 @@
 				});
 		},
 		overview = function () {
-			_$('.active')[0] && (_$('.active')[0].className = '');
-			_$('#overview_a').className = 'active';
 			content_div.innerHTML = t('overview');
 		},
 		welcome = function () {
-			content_div.innerHTML = '';
+			content_div.innerHTML = 'Welcome';
 		},
 		about = function () {
-			_$('.active')[0] && (_$('.active')[0].className = '');
-			_$('#about_a').className = 'active';
 			content_div.innerHTML = t('about');
 		},
-		choose = function () {
-			_$('.active')[0] && (_$('.active')[0].className = '');
-			_$('#choose_a').className = 'active';
-			content_div.innerHTML = t('choose');
-		},
-		partner = function (ctx) {
-			switch (ctx.params.action) {
-				case 'contract':
+		choose = function (ctx) {
+			switch (ctx.params.class) {
+				case 'partner' :
 					content_div.innerHTML = t('partner_contract');
 					break;
-				case 'decline':
+				case 'staff' :
+					content_div.innerHTML = t('staff_contract');
+					break;
+				case 'decline' :
 					content_div.innerHTML = 'Awww :( sad';
 					break;
+				default :
+					content_div.innerHTML = t('choose');
 			}
 		},
-		channels = function () {
-			var data = Cookies.get('channels');
+		partner = function (ctx) {
+		},
+		staff = function (ctx) {
+		},
+		channels = function (ctx) {
+			var data,
+				datum;
 			if (user_info) {
-				// just for now
-				// Cookies.expire('channels');
-				if (data) {
-					data = JSON.parse(data);
-					user_info.channels = data;
-				}
-				content_div.innerHTML = t('channels', {api : api});
-				console.dir(user_info.channels);
-				if (user_info.channels) {
-					content_div.innerHTML += t('channel_list', {data : JSON.stringify(user_info.channels, null, 4)});
+				switch (ctx.params.action) {
+					case 'add':
+						if (Cookies.get('channels')) {
+							data = JSON.parse(Cookies.get('channels'));
+							Cookies.expire('channels');
+							content_div.innerHTML = t('add_channel', {data : JSON.stringify(data, null, 4)});
+							_$('#add_channel_form').addEventListener('submit', function (e) {
+								e.preventDefault();
+								datum = data.items[0];
+								datum.network_id = serialize(e.target).network_id;
+								curl.post(api + 'channel/add')
+									.send(datum)
+									.then(function () {
+										alert('yay success');
+									})
+									.onerror(function (e) {
+										console.dir(e);
+										alert(e.message || e);
+									});
+								return false;
+							});
+						} else {
+							page.show('/channels');
+						}
+						break;
+					default :
+						curl.get(api + 'channels')
+							.then(function (data) {
+								console.dir(data);
+								user_info.channels = data;
+								content_div.innerHTML = t('channels', {
+									api : api,
+									data : JSON.stringify(user_info.channels, null, 4)
+								});
+							});
 				}
 			}
 			else
@@ -164,6 +197,9 @@
 					temp.click();
 					page.show('/');
 				});
+		},
+		notFound = function () {
+			content_div.innerHTML = t('not_found');
 		},
 
 
@@ -196,8 +232,10 @@
 		serialize = function (f) {
 			var i = f.length,
 				ret = {};
-			while (i--)
+			while (i--) {
+				if (f[i].type === 'submit') continue;
 				ret[f[i].name] = f[i].value;
+			}
 			return ret;
 		},
 
@@ -226,15 +264,18 @@
 	/**
 		Setup Pages
 	**/
+	page('*', activateLink);
+	page('/', welcome);
 	page('/register', register);
 	page('/profile/:action?', profile);
 	page('/overview', overview);
 	page('/about', about);
-	page('/choose', choose);
-	page('/partner/:action', partner);
-	page('/channels', channels);
+	page('/choose/:class?', choose);
+	page('/partner', partner);
+	page('/staff', staff);
+	page('/channels/:action?', channels);
 	page('/error', error);
-	page('*', welcome);
+	page('*', notFound);
 
 
 
@@ -263,6 +304,8 @@
 
 
 
+
+
 	doc.body.addEventListener('click', function (e) {
 		var href = e.target.getAttribute('href');
 		if (href && !~href.indexOf('http://')) {
@@ -273,6 +316,7 @@
 	}, true);
 
 
+	root.onpopstate = page;
 
 
 	/**

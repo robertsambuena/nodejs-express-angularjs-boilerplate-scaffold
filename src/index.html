@@ -137,37 +137,57 @@
 		</template>
 
 		<template id="choose_tmpl">
-			So... what you wannabe?
+			Choose a class
 			<br /><br /><br />
-			<a href="/partner/contract" class="button">Partner</a>
+			<a href="/choose/partner" class="button">Partner</a>
 			<br /><br /><br />
-			<a href="/staff" class="button">Staff</a>
+			<a href="/choose/staff" class="button">Staff</a>
 		</template>
 
 		<template id="partner_contract_tmpl">
-			This is a contract...
+			This is a contract for partners...
 			Lorem ipsum blablabla.
 			<br /><br /><br /><br />
 			<a href="/channels" class="button">I accept</a>
 			<br /><br /><br />
-			<a href="/partner/decline" class="button">Nope</a>
+			<a href="/choose/decline" class="button">Nope</a>
+		</template>
+
+		<template id="staff_contract_tmpl">
+			This is a contract for staff...
+			Lorem ipsum blablabla.
+			<br /><br /><br /><br />
+			<a href="/channels" class="button">I accept</a>
+			<br /><br /><br />
+			<a href="/choose/decline" class="button">Nope</a>
 		</template>
 
 		<template id="channels_tmpl">
 			<a href="{api}channel/add" class="button">Add Channel</a>
+			<pre>{data}</pre>
 		</template>
 
-		<template id="channel_list_tmpl">
-			<br /><br /><br /><br />
-			Your channels :
+		<template id="add_channel_tmpl">
+			Add this channel? :
 			<br />
-			<pre>
-{data}
-			</pre>
+			<form id="add_channel_form">
+				<pre>{data}</pre>
+				<select id="network_select" required="required" name="network_id">
+					<option value="1">Network 1</option>
+					<option value="2">Network 2</option>
+					<option value="3">Network 3</option>
+					<option value="4">Network 4</option>
+				</select>
+				<input type="submit" value="Add" name="submit"/>
+			</form>
 		</template>
 
 		<template id="about_tmpl">
 			Hi im about page, and you are?
+		</template>
+
+		<template id="not_found_tmpl">
+			Page Not Found :(
 		</template>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>

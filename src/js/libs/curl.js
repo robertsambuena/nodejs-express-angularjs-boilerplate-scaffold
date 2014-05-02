@@ -48,12 +48,13 @@
 				this.started = true;
 				NProgress.start();
 
-				data = data || {};
 
-				if (this.method === 'GET')
+				if (this.method === 'GET' && data)
 					this.url += '?' + stringify(data);
-				else
+				else {
+					data = data || {};
 					payload = stringify(data);
+				}
 
 				req.open(this.method, this.url, true);
 				req.withCredentials = true;

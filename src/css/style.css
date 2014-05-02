@@ -27,6 +27,7 @@ a, button, input[type="button"], input[type="submit"] , #logo_img{
 	clear: both;
 }
 .button{
+	display: inline-block;
 	border: 1px solid #CCC;
 	padding: 5px 10px;
 }
