@@ -42,6 +42,8 @@
 				? JSON.parse(data)
 				: false;
 
+			console.dir(data);
+
 			if (!data) {
 				data = {};
 				data.fname = data.lname = data.email = data.avatar = data.google_refresh_token = '';
@@ -142,6 +144,14 @@
 		partner = function (ctx) {
 		},
 		staff = function (ctx) {
+			switch (ctx.params.action) {
+				case 'accept' :
+					curl.post(api + 'staff')
+						.then(function (data) {
+							console.dir(data);
+						});
+					break;
+			}
 		},
 		channels = function (ctx) {
 			var data,
@@ -172,6 +182,12 @@
 							page.show('/channels');
 						}
 						break;
+					case 'accept' :
+						curl.post(api + 'partner')
+							.then(function (data) {
+								page.show('/channels');
+							});
+						break;
 					default :
 						curl.get(api + 'channels')
 							.then(function (data) {
@@ -200,6 +216,33 @@
 		},
 		notFound = function () {
 			content_div.innerHTML = t('not_found');
+		},
+		prospect = function () {
+			content_div.innerHTML = t('prospect');
+			_$('#search_form').addEventListener('submit', function (e) {
+				e.preventDefault();
+				curl.get(api + 'channel/search/' + e.target.q.value)
+					.then(function (res) {
+						if (res.items.length > 0) {
+							res = res.items[0];
+							_$('#result_div').innerHTML = t('prospect_result', {
+								username : e.target.q.value,
+								title : res.snippet.title,
+								published : new Date(res.snippet.publishedAt).toDateString(),
+								subscribers : res.statistics.subscriberCount,
+								views : res.statistics.viewCount,
+								rating : 'Poor rating',
+							});
+						}
+						else {
+							_$('#result_div').innerHTML = 'Found nothing';
+						}
+					})
+					.onerror(function (err) {
+						console.dir(err);
+					});
+				return false;
+			}, true);
 		},
 
 
@@ -275,6 +318,7 @@
 	page('/staff', staff);
 	page('/channels/:action?', channels);
 	page('/error', error);
+	page('/prospect', prospect);
 	page('*', notFound);
 
 

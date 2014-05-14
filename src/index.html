@@ -49,6 +49,11 @@
 						</a>
 					</li>
 					<li>
+						<a id="about_a" href="/prospect">
+							<i class="fa fa-users fa-lg"></i> Prospect
+						</a>
+					</li>
+					<li>
 						<a id="choose_a" class="button" href="/choose">Choose your class</a>
 					</li>
 				</ul>
@@ -148,7 +153,7 @@
 			This is a contract for partners...
 			Lorem ipsum blablabla.
 			<br /><br /><br /><br />
-			<a href="/channels" class="button">I accept</a>
+			<a href="/channels/accept" class="button">I accept</a>
 			<br /><br /><br />
 			<a href="/choose/decline" class="button">Nope</a>
 		</template>
@@ -157,7 +162,7 @@
 			This is a contract for staff...
 			Lorem ipsum blablabla.
 			<br /><br /><br /><br />
-			<a href="/channels" class="button">I accept</a>
+			<a href="/staff/accept" class="button">I accept</a>
 			<br /><br /><br />
 			<a href="/choose/decline" class="button">Nope</a>
 		</template>
@@ -190,6 +195,36 @@
 			Page Not Found :(
 		</template>
 
+		<template id="prospect_tmpl">
+			Prospect
+			<br />
+			<form id="search_form">
+				<input type="text" name="q"/>
+				<input type="submit" class="disappear"/>
+			</form>
+			<br />
+			<pre id="result_div">
+			</pre>
+		</template>
+
+		<template id="prospect_result_tmpl">
+			channel: {username}
+			<br />
+			owner: {title}
+			<br />
+			location: NA
+			<br />
+			published: {published}
+			<br />
+			subscribers: {subscribers}
+			<br />
+			views: {views}
+			<br />
+			rating: {rating}
+			<br />
+			<button>Accept Channel</button>
+			<button>Decline Channel</button>
+		</template>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
 		<script type="text/javascript" src="/min.js"></script>
     </body>

@@ -32,6 +32,14 @@ a, button, input[type="button"], input[type="submit"] , #logo_img{
 	padding: 5px 10px;
 }
 
+.disappear{
+	width: 0px;
+	height: 0px;
+	margin: 0px;
+	padding: 0px;
+	opacity: 0;
+	visibility: hidden;
+}
 
 
 
