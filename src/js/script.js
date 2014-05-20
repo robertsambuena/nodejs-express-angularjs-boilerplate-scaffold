@@ -219,18 +219,22 @@
 		},
 		prospect = function () {
 			content_div.innerHTML = t('prospect');
+			_$('#prospect_search_input').focus();
 			_$('#search_form').addEventListener('submit', function (e) {
 				e.preventDefault();
 				curl.get(api + 'channel/search/' + e.target.q.value)
 					.then(function (res) {
 						if (res.items.length > 0) {
 							res = res.items[0];
+							console.dir(res);
 							_$('#prospect_result_div').innerHTML = t('prospect_result', {
 								username : e.target.q.value,
+								img : res.snippet.thumbnails.default.url,
 								title : res.snippet.title,
 								published : new Date(res.snippet.publishedAt).toDateString(),
-								subscribers : res.statistics.subscriberCount,
-								views : res.statistics.viewCount,
+								subscribers : res.statistics.subscriberCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+								views : res.statistics.viewCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+								videos : res.statistics.videoCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 								rating : classifyChannelByViews(+res.statistics.viewCount),
 							});
 						}
@@ -306,12 +310,12 @@
 		*/
 
 		classifyChannelByViews = function (count) {
-			if (count >= 10000000) return 'excellent';
-			if (count >= 5000000) return 'very good';
-			if (count >= 1000000) return 'good';
-			if (count >= 500000) return 'average';
-			if (count >= 250000) return 'below average';
-			if (count >= 100000) return 'poor';
+			if (count >= 10000000) return 'Excellent!!';
+			if (count >= 5000000) return 'Very Good!';
+			if (count >= 1000000) return 'Good :)';
+			if (count >= 500000) return 'Average';
+			if (count >= 250000) return 'Below Average';
+			if (count >= 100000) return 'Poor :(';
 			return 'very poor';
 		}
 		;

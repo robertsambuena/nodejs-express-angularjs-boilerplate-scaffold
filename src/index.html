@@ -5,7 +5,6 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link rel="shortcut icon" href="/favicon.png" />
-		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.1.2/nprogress.min.css" />
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
 		<link rel="stylesheet" href="/min.css" />
@@ -196,44 +195,45 @@
 		</template>
 
 		<template id="prospect_tmpl">
-			<div id="prospects_ul_wrapper">
-				<ul id="prospects_ul">
-					<li><a href="prospect/leads">Leads</a></li>
-					<li><a href="prospect/contacted">Contacted</a></li>
-					<li><a href="prospect/pitched">Pitched</a></li>
-					<li><a href="prospect/demo">Demo</a></li>
-					<li><a href="prospect/negotiating">Negotiating</a></li>
-					<li><a href="prospect/closed-lost">Closed (lost)</a></li>
-					<li><a href="prospect/closed-won">Closed (won)</a></li>
-				</ul>
-			</div>
-			Prospect
-			<br />
 			<form id="search_form">
-				<input type="text" name="q"/>
+				Search&nbsp;<input type="text" name="q" placeholder="Enter prospect's username" id="prospect_search_input"/>
 				<input type="submit" class="disappear"/>
 			</form>
-			<br />
-			<pre id="prospect_result_div"></pre>
+			<div id="prospect_result_div"></div>
+			<hr />
+			<div id="prospects_ul_wrapper">
+				<ul id="prospects_ul">
+					<li><a href="/prospect/leads">Leads</a></li>
+					<li><a href="/prospect/contacted">Contacted</a></li>
+					<li><a href="/prospect/pitched">Pitched</a></li>
+					<li><a href="/prospect/demo">Demo</a></li>
+					<li><a href="/prospect/negotiating">Negotiating</a></li>
+					<li><a href="/prospect/closed-lost">Closed (lost)</a></li>
+					<li><a href="/prospect/closed-won">Closed (won)</a></li>
+				</ul>
+			</div>
 		</template>
 
 		<template id="prospect_result_tmpl">
-			channel: {username}
-			<br />
-			owner: {title}
-			<br />
-			location: NA
-			<br />
-			published: {published}
-			<br />
-			subscribers: {subscribers}
-			<br />
-			views: {views}
-			<br />
-			rating: {rating}
-			<br />
-			<button>Accept Channel</button>
-			<button>Decline Channel</button>
+			<table id="prospect_result_table">
+				<tbody>
+					<tr>
+						<td rowspan="3"><img src="{img}" width="88px" height="88px"/></td>
+						<td id="prospect_title_td">
+							{title}
+							<span id="prospect_videos_span"> {videos} videos</span>
+						</td>
+						<td id="prospect_views_td">{views} <small>views</small></td>
+					</tr>
+					<tr>
+						<td>
+							<button id="recruit_button">Recruit!</button>
+							<span id="prospect_subscribers_span">{subscribers} subscribers</span>
+						</td>
+						<td id="prospect_rating_td">{rating}</td>
+					</tr>
+				</tbody>
+			</table>
 		</template>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
 		<script type="text/javascript" src="/min.js"></script>
