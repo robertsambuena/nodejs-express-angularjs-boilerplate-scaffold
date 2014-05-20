@@ -210,3 +210,31 @@ header{
 	font-weight: bold;
 	font-size: 22px;
 }
+
+
+#prospects_ul_wrapper{
+	width: 100%;
+	text-align: center;
+}
+#prospects_ul{
+	list-style-type: none;
+}
+#prospects_ul li{
+	display: inline-block;
+}
+#prospects_ul li a{
+	font-family: "Open Sans";
+	padding: 20px 60px;
+	text-align: center;
+	color: #EEE;
+	background: #CC181e;
+	border-bottom: 3px solid #000;
+}
+#prospects_ul li a:hover, #prospects_ul li a.selected{
+	box-shadow: 0px 0px 10px #FFF;
+	background: #C42B1B;
+	font-weight: bold;
+	color: #FFF;
+	border-bottom-width: 4px;
+}
+

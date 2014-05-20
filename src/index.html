@@ -196,6 +196,17 @@
 		</template>
 
 		<template id="prospect_tmpl">
+			<div id="prospects_ul_wrapper">
+				<ul id="prospects_ul">
+					<li><a href="prospect/leads">Leads</a></li>
+					<li><a href="prospect/contacted">Contacted</a></li>
+					<li><a href="prospect/pitched">Pitched</a></li>
+					<li><a href="prospect/demo">Demo</a></li>
+					<li><a href="prospect/negotiating">Negotiating</a></li>
+					<li><a href="prospect/closed-lost">Closed (lost)</a></li>
+					<li><a href="prospect/closed-won">Closed (won)</a></li>
+				</ul>
+			</div>
 			Prospect
 			<br />
 			<form id="search_form">
@@ -203,8 +214,7 @@
 				<input type="submit" class="disappear"/>
 			</form>
 			<br />
-			<pre id="result_div">
-			</pre>
+			<pre id="prospect_result_div"></pre>
 		</template>
 
 		<template id="prospect_result_tmpl">

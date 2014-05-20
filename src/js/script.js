@@ -225,7 +225,7 @@
 					.then(function (res) {
 						if (res.items.length > 0) {
 							res = res.items[0];
-							_$('#result_div').innerHTML = t('prospect_result', {
+							_$('#prospect_result_div').innerHTML = t('prospect_result', {
 								username : e.target.q.value,
 								title : res.snippet.title,
 								published : new Date(res.snippet.publishedAt).toDateString(),
@@ -235,7 +235,7 @@
 							});
 						}
 						else {
-							_$('#result_div').innerHTML = 'Found nothing';
+							_$('#prospect_result_div').innerHTML = 'Found nothing';
 						}
 					})
 					.onerror(function (err) {
