@@ -224,17 +224,20 @@ header{
 }
 #prospects_ul li a{
 	font-family: "Open Sans";
-	padding: 20px 60px;
+	padding: 10px 20px;
 	text-align: center;
+	font-size: 14px;
 	color: #EEE;
 	background: #CC181e;
 	border-bottom: 3px solid #000;
 }
 #prospects_ul li a:hover, #prospects_ul li a.selected{
-	box-shadow: 0px 0px 10px #FFF;
+	font-size: 15px;
+	/* box-shadow: 0px 0px 10px #FFF; */
 	background: #C42B1B;
 	font-weight: bold;
 	color: #FFF;
-	border-bottom-width: 4px;
+	border: 1px solid #CCC;
+	border-bottom: 4px solid #000;
 }
 

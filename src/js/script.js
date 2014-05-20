@@ -231,7 +231,7 @@
 								published : new Date(res.snippet.publishedAt).toDateString(),
 								subscribers : res.statistics.subscriberCount,
 								views : res.statistics.viewCount,
-								rating : 'Poor rating',
+								rating : classifyChannelByViews(+res.statistics.viewCount),
 							});
 						}
 						else {
@@ -298,6 +298,21 @@
 				page.show(root.location.pathname);
 				setProfileNav();
 			}
+		},
+
+
+		/**
+			Helper functions
+		*/
+
+		classifyChannelByViews = function (count) {
+			if (count >= 10000000) return 'excellent';
+			if (count >= 5000000) return 'very good';
+			if (count >= 1000000) return 'good';
+			if (count >= 500000) return 'average';
+			if (count >= 250000) return 'below average';
+			if (count >= 100000) return 'poor';
+			return 'very poor';
 		}
 		;
 
@@ -342,13 +357,6 @@
 			temp.paddingLeft = '0px';
 		}
 	}, true);
-
-
-
-
-
-
-
 
 	doc.body.addEventListener('click', function (e) {
 		var href = e.target.getAttribute('href');
