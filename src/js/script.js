@@ -218,35 +218,61 @@
 			content_div.innerHTML = t('not_found');
 		},
 		prospect = function () {
-			content_div.innerHTML = t('prospect');
-			_$('#prospect_search_input').focus();
-			_$('#search_form').addEventListener('submit', function (e) {
-				e.preventDefault();
-				curl.get(api + 'channel/search/' + e.target.q.value)
-					.then(function (res) {
-						if (res.items.length > 0) {
-							res = res.items[0];
-							console.dir(res);
-							_$('#prospect_result_div').innerHTML = t('prospect_result', {
-								username : e.target.q.value,
-								img : res.snippet.thumbnails.default.url,
-								title : res.snippet.title,
-								published : new Date(res.snippet.publishedAt).toDateString(),
-								subscribers : res.statistics.subscriberCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-								views : res.statistics.viewCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-								videos : res.statistics.videoCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-								rating : classifyChannelByViews(+res.statistics.viewCount),
+			var search_result = {},
+				bindSubmitForm = function () {
+					_$('#search_form').addEventListener('submit', function (e) {
+						var temp = '<br />Channel not found.';
+						e.preventDefault();
+						curl.get(api + 'channel/search/' + encodeURIComponent(e.target.q.value))
+							.then(function (res) {
+								if (res.items.length > 0) {
+									res = res.items[0];
+									search_result.username = e.target.q.value;
+									search_result.owner = res.snippet.title;
+									search_result.thumbnail = res.snippet.thumbnails.default.url;
+									temp = t('prospect_result', {
+										img : res.snippet.thumbnails.default.url,
+										title : res.snippet.title,
+										subscribers : res.statistics.subscriberCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+										views : res.statistics.viewCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+										videos : res.statistics.videoCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+										rating : classifyChannelByViews(+res.statistics.viewCount),
+									});
+								}
+							})
+							.finally(function () {
+								_$('#prospect_result_div').innerHTML = temp;
+								bindRecruitButton();
 							});
-						}
-						else {
-							_$('#prospect_result_div').innerHTML = 'Found nothing';
-						}
-					})
-					.onerror(function (err) {
-						console.dir(err);
-					});
-				return false;
-			}, true);
+						return false;
+					}, true);
+				},
+				bindRecruitButton = function () {
+					_$('#recruit_button') &&
+					_$('#recruit_button').addEventListener('click', function (e) {
+						curl.post(api + 'prospect/add')
+							.send(search_result)
+							.then(function (r) {
+								e.target.disabled = true;
+								e.target.className = 'disabled';
+								e.target.innerHTML = 'Recruited';
+								console.dir(r);
+							})
+							.onerror(function (e) {
+								console.dir(e);
+							});
+					}, true);
+				};
+
+
+
+			curl.get(api + 'prospects')
+				.then(function (a) {
+					console.dir(a);
+					content_div.innerHTML = t('prospect');
+					_$('#prospect_search_input').focus();
+					bindSubmitForm();
+				});
 		},
 
 
@@ -315,8 +341,8 @@
 			if (count >= 1000000) return 'Good :)';
 			if (count >= 500000) return 'Average';
 			if (count >= 250000) return 'Below Average';
-			if (count >= 100000) return 'Poor :(';
-			return 'very poor';
+			if (count >= 100000) return 'Poor';
+			return 'Very Poor :(';
 		}
 		;
 

@@ -258,23 +258,22 @@ header{
 }
 #prospects_ul li a:hover, #prospects_ul li a.selected{
 	font-size: 15px;
-	/* box-shadow: 0px 0px 10px #FFF; */
 	background: #C42B1B;
 	font-weight: bold;
 	color: #FFF;
-	border: 1px solid #CCC;
 	border-bottom: 4px solid #000;
 }
 #prospect_result_table{
 	font-family: Arial;
 	margin-top: 20px;
+	width: 100%;
 }
 #prospect_result_table tr:first-child td:first-child{
 	width: 88px;
 }
-#prospect_result_table tr:first-child td:nth-child(2),
-#prospect_result_table tr:nth-child(2) td:first-child{
-	width: 400px;
+#prospect_result_table tr:first-child td:nth-child(3),
+#prospect_result_table tr:nth-child(2) td:nth-child(2){
+	width: 210px;
 }
 #prospect_title_td{
 	font-weight: bold;
@@ -305,8 +304,12 @@ header{
 	background: #000;
 	color: #FFF;
 	font-size: 15px;
-	padding: 5px 10px;
+	padding: 10px 20px;
 	border: 0;
 	font-family: "Open Sans";
 	font-weight: bold;
+}
+#recruit_button.disabled{
+	background: #AAA;
+	cursor : inherit;
 }
