@@ -42,8 +42,6 @@
 				? JSON.parse(data)
 				: false;
 
-			console.dir(data);
-
 			if (!data) {
 				data = {};
 				data.fname = data.lname = data.email = data.avatar = data.google_refresh_token = '';
@@ -217,8 +215,9 @@
 		notFound = function () {
 			content_div.innerHTML = t('not_found');
 		},
-		prospect = function () {
+		prospect = function (ctx) {
 			var search_result = {},
+				prospects,
 				bindSubmitForm = function () {
 					_$('#search_form').addEventListener('submit', function (e) {
 						var temp = '<br />Channel not found.';
@@ -262,16 +261,31 @@
 								console.dir(e);
 							});
 					}, true);
+				},
+				setProspects = function (status) {
+					var temp = prospects.filter(function (a) {
+							return a.status === status;
+						}),
+						i = temp.length,
+						html = '';
+
+					while (i--) {
+						temp[i].note = (temp[i].note || 'None as of the moment');
+						html += t('prospect_result_tr', temp[i]);
+					}
+
+					_$('#prospect_table_tbody').innerHTML = html;
 				};
 
 
 
 			curl.get(api + 'prospects')
 				.then(function (a) {
-					console.dir(a);
+					prospects =  a;
 					content_div.innerHTML = t('prospect');
 					_$('#prospect_search_input').focus();
 					bindSubmitForm();
+					setProspects(ctx.params.action || 'Lead');
 				});
 		},
 
@@ -363,7 +377,7 @@
 	page('/staff', staff);
 	page('/channels/:action?', channels);
 	page('/error', error);
-	page('/prospect', prospect);
+	page('/prospect/:action?', prospect);
 	page('*', notFound);
 
 

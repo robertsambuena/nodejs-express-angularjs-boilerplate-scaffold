@@ -252,7 +252,7 @@ header{
 	font-family: "Open Sans";
 	padding: 10px 20px;
 	text-align: center;
-	font-size: 14px;
+	font-size: 16px;
 	color: #EEE;
 	background: #CC181e;
 }
@@ -312,4 +312,36 @@ header{
 #recruit_button.disabled{
 	background: #AAA;
 	cursor : inherit;
+}
+
+#prospects_table{
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	border-bottom: 4px solid #000;
+}
+#prospects_table td:nth-child(1), #prospects_table th:nth-child(1){
+	width: 5%;
+}
+#prospects_table td:nth-child(2), #prospects_table th:nth-child(2){
+	width: 88px;
+}
+#prospects_table td:nth-child(3), #prospects_table th:nth-child(3){
+	width: 20%;
+}
+#prospects_table td:nth-child(4), #prospects_table th:nth-child(4){
+	width: 20%;
+}
+#prospects_table thead{
+	background: #000;
+}
+#prospects_table th{
+	padding: 10px 0px;
+	color: #CCC;
+	font-weight: normal;
+	font-size: 14px;
+}
+#prospects_table td{
+	padding: 5px 0px;
+	text-align: center;
 }
