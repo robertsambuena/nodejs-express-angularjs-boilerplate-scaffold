@@ -345,3 +345,8 @@ header{
 	padding: 5px 0px;
 	text-align: center;
 }
+#delete_prospect_button{
+	background: transparent;
+	border: none;
+	color: #FFF;
+}

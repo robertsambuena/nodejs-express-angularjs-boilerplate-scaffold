@@ -218,12 +218,23 @@
 		prospect = function (ctx) {
 			var search_result = {},
 				prospects,
+				bindDeleteButton = function () {
+					_$('#delete_prospect_button').addEventListener('click', function (e) {
+						toArray(_$('option:checked')).map(function (a) {
+							return a.value
+						});
+					}, true);
+				},
 				bindSubmitForm = function () {
 					_$('#search_form').addEventListener('submit', function (e) {
-						var temp = '<br />Channel not found.';
+						var temp = '<br />Channel not found.',
+							button,
+							temp2;
 						e.preventDefault();
 						curl.get(api + 'channel/search/' + encodeURIComponent(e.target.q.value))
 							.then(function (res) {
+								temp2 = res.is_recruited;
+								res = res.search_result;
 								if (res.items.length > 0) {
 									res = res.items[0];
 									search_result.username = e.target.q.value;
@@ -241,6 +252,12 @@
 							})
 							.finally(function () {
 								_$('#prospect_result_div').innerHTML = temp;
+								button = _$('#recruit_button');
+								if (temp2.length > 0) {
+									button.disabled = true;
+									button.className = 'disabled';
+									button.innerHTML = 'Recruited';
+								}
 								bindRecruitButton();
 							});
 						return false;
@@ -267,7 +284,31 @@
 							return a.status === status;
 						}),
 						i = temp.length,
-						html = '';
+						html = '',
+						lead_length = prospects.filter(function (a) {
+							return a.status === 'Lead';
+						}).length,
+						contacted_length = prospects.filter(function (a) {
+							return a.status === 'Contacted';
+						}).length,
+						pitched_length = prospects.filter(function (a) {
+							return a.status === 'Pitched';
+						}).length,
+						demo_length = prospects.filter(function (a) {
+							return a.status === 'Demo';
+						}).length,
+						negotiating_length = prospects.filter(function (a) {
+							return a.status === 'Negotiating';
+						}).length,
+						closed_lost_length = prospects.filter(function (a) {
+							return a.status === 'Closed (lost)';
+						}).length,
+						closed_won_length = prospects.filter(function (a) {
+							return a.status === 'Closed (won)';
+						}).length;
+
+
+					_$('[href="/prospect/' + status + '"]')[0].className = 'selected';
 
 					while (i--) {
 						temp[i].note = (temp[i].note || 'None as of the moment');
@@ -275,6 +316,15 @@
 					}
 
 					_$('#prospect_table_tbody').innerHTML = html;
+					_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
+					_$('#contacted_a').innerHTML = 'Contacted '  + (contacted_length === 0 ? '' : ('[' + contacted_length + ']'));
+					_$('#pitched_a').innerHTML = 'Pitched '  + (pitched_length === 0 ? '' : ('[' + pitched_length + ']'));
+					_$('#demo_a').innerHTML = 'Demo '  + (demo_length === 0 ? '' : ('[' + demo_length + ']'));
+					_$('#negotiating_a').innerHTML = 'Negotiating '  + (negotiating_length === 0 ? '' : ('[' + negotiating_length + ']'));
+					_$('#closed_lost_a').innerHTML = 'Closed (lost) '  + (closed_lost_length === 0 ? '' : ('[' + closed_lost_length + ']'));
+					_$('#closed_won_a').innerHTML = 'Closed (won) '  + (closed_won_length === 0 ? '' : ('[' + closed_won_length + ']'));
+
+					bindDeleteButton();
 				};
 
 
@@ -357,6 +407,13 @@
 			if (count >= 250000) return 'Below Average';
 			if (count >= 100000) return 'Poor';
 			return 'Very Poor :(';
+		},
+		toArray = function (nl) {
+			var arr = [],
+				i,
+				l;
+			for (i =- 1, l = nl.length >>> 0; ++i !== l; arr[i] = nl[i]);
+			return arr;
 		}
 		;
 

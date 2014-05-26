@@ -203,19 +203,23 @@
 			<hr />
 			<div id="prospects_ul_wrapper">
 				<ul id="prospects_ul">
-					<li><a href="/prospect/Lead">Leads</a></li>
-					<li><a href="/prospect/Contacted">Contacted</a></li>
-					<li><a href="/prospect/Pitched">Pitched</a></li>
-					<li><a href="/prospect/Demo">Demo</a></li>
-					<li><a href="/prospect/Negotiating">Negotiating</a></li>
-					<li><a href="/prospect/Closed (lost)">Closed (lost)</a></li>
-					<li><a href="/prospect/Closed (won)">Closed (won)</a></li>
+					<li><a href="/prospect/Lead" id="leads_a">Leads</a></li>
+					<li><a href="/prospect/Contacted" id="contacted_a">Contacted</a></li>
+					<li><a href="/prospect/Pitched" id="pitched_a">Pitched</a></li>
+					<li><a href="/prospect/Demo" id="demo_a">Demo</a></li>
+					<li><a href="/prospect/Negotiating" id="negotiating_a">Negotiating</a></li>
+					<li><a href="/prospect/Closed (lost)" id="closed_lost_a">Closed (lost)</a></li>
+					<li><a href="/prospect/Closed (won)" id="closed_won_a">Closed (won)</a></li>
 				</ul>
 			</div>
 			<table id="prospects_table">
 				<thead>
 					<tr>
-						<th></th>
+						<th>
+							<button id="delete_prospect_button">
+								<i class="fa fa-trash-o fa-lg"></i>
+							</button>
+						</th>
 						<th></th>
 						<th>Channel</th>
 						<th>Status</th>
@@ -228,7 +232,7 @@
 
 		<template id="prospect_result_tr_tmpl">
 			<tr>
-				<td><input type="checkbox" /></td>
+				<td><input type="checkbox" value="{id}"/></td>
 				<td><img src="{thumbnail}" width="88px" height="88px"/></td>
 				<td>{owner}</td>
 				<td>
