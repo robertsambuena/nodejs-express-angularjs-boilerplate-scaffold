@@ -237,6 +237,7 @@
 									var e = _$('#prospect_' + a + '_tr');
 									e.parentNode.removeChild(e);
 								});
+
 								prospects = prospects.filter(function (a) {
 									var toBeSaved = !~ids.indexOf('' + a._id),
 										button = _$('#recruit_button');
@@ -246,12 +247,35 @@
 										button.className = '';
 										button.innerHTML = 'Recruit!';
 									}
+
 									return toBeSaved;
-`							})
+								});
+
+								setProspects(ctx.params.action || 'Lead');
+							})
 							.onerror(function (e) {
 								console.dir(e);
 							});
 					}, true);
+				},
+				bindStatusChange = function (elem, status) {
+					status && (elem.value = status);
+					elem.addEventListener('change', function (e) {
+						curl.put(api + 'prospect/update')
+							.send({
+								id : parseInt(e.target.value),
+								status : e.target.value.split('|')[1]
+							})
+							.then(function (data) {
+								prospects.filter(function (a) {
+									return a._id === parseInt(e.target.value);
+								})[0].status = e.target.value.split('|')[1];
+								setProspects(ctx.params.action || 'Lead');
+							})
+							.onerror(function (err) {
+								console.dir(err);
+							});
+					});
 				},
 				bindSubmitForm = function () {
 					_$('#search_form').addEventListener('submit', function (e) {
@@ -302,13 +326,16 @@
 								e.target.disabled = true;
 								e.target.className = 'disabled';
 								e.target.innerHTML = 'Recruited';
+								r.prospect.note = (r.prospect.note || 'None as of the moment');
 								prospects.push(r.prospect);
 								lead_length = prospects.filter(function (a) {
 									return a.status === 'Lead';
 								}).length;
-								r.prospect.note = (r.prospect.note || 'None as of the moment');
-								_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', r.prospect);
 								_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
+								if (ctx.params.action === 'Lead' || !ctx.params.action) {
+									_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', r.prospect);
+									bindStatusChange(_$('#prospect_status_' + r.prospect._id + '_select');
+								}
 							})
 							.onerror(function (e) {
 								console.dir(e);
@@ -343,23 +370,26 @@
 							return a.status === 'Closed (won)';
 						}).length;
 
-
 					_$('[href="/prospect/' + status + '"]')[0].className = 'selected';
 
-					_$('#prospect_table_tbody').innerHTML = '';
 					while (i--) {
 						temp[i].note = (temp[i].note || '');
-						_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', temp[i]);
+						html += t('prospect_result_tr', temp[i]);
 					}
 
-					_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
-					_$('#contacted_a').innerHTML = 'Contacted '  + (contacted_length === 0 ? '' : ('[' + contacted_length + ']'));
-					_$('#pitched_a').innerHTML = 'Pitched '  + (pitched_length === 0 ? '' : ('[' + pitched_length + ']'));
+					_$('#prospect_table_tbody').innerHTML = html;
 					_$('#demo_a').innerHTML = 'Demo '  + (demo_length === 0 ? '' : ('[' + demo_length + ']'));
+					_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
+					_$('#pitched_a').innerHTML = 'Pitched '  + (pitched_length === 0 ? '' : ('[' + pitched_length + ']'));
+					_$('#contacted_a').innerHTML = 'Contacted '  + (contacted_length === 0 ? '' : ('[' + contacted_length + ']'));
+					_$('#closed_won_a').innerHTML = 'Closed (won) '  + (closed_won_length === 0 ? '' : ('[' + closed_won_length + ']'));
 					_$('#negotiating_a').innerHTML = 'Negotiating '  + (negotiating_length === 0 ? '' : ('[' + negotiating_length + ']'));
 					_$('#closed_lost_a').innerHTML = 'Closed (lost) '  + (closed_lost_length === 0 ? '' : ('[' + closed_lost_length + ']'));
-					_$('#closed_won_a').innerHTML = 'Closed (won) '  + (closed_won_length === 0 ? '' : ('[' + closed_won_length + ']'));
 
+					// bind status changes
+					i = temp.length;
+					while (i--)
+						bindStatusChange(_$('#prospect_status_' + temp[i]._id + '_select'), temp[i]._id + '|' + temp[i].status);
 				},
 				getProspects = function () {
 					curl.get(api + 'prospects')
