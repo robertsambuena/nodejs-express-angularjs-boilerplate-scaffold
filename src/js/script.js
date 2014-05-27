@@ -258,9 +258,9 @@
 							});
 					}, true);
 				},
-				bindStatusChange = function (elem, status) {
-					status && (elem.value = status);
-					elem.addEventListener('change', function (e) {
+				bindRowEvents = function (select, status, textarea) {
+					status && (select.value = status);
+					select.addEventListener('change', function (e) {
 						curl.put(api + 'prospect/update')
 							.send({
 								id : parseInt(e.target.value),
@@ -276,16 +276,31 @@
 								console.dir(err);
 							});
 					});
+					textarea.addEventListener('keyup', function (e) {
+						curl.put(api + 'prospect/update')
+							.send({
+								id : e.target.getAttribute('data-id'),
+								note : e.target.value || ' '
+							})
+							.then(function (data) {
+								console.log(data);
+							})
+							.onerror(function (err) {
+								console.dir(err);
+							});
+					});
 				},
 				bindSubmitForm = function () {
 					_$('#search_form').addEventListener('submit', function (e) {
 						var temp = '<br />Channel not found.',
 							button,
+							self,
 							temp2;
 						e.preventDefault();
 						curl.get(api + 'channel/search/' + encodeURIComponent(e.target.q.value))
 							.then(function (res) {
 								temp2 = res.is_recruited;
+								self = res.self;
 								res = res.search_result;
 								search_result = {};
 								if (res.items.length > 0) {
@@ -306,11 +321,13 @@
 							.finally(function () {
 								_$('#prospect_result_div').innerHTML = temp;
 								button = _$('#recruit_button');
-								if (temp2.length > 0) {
+								console.log(self);
+								if (self) {
 									button.disabled = true;
 									button.className = 'disabled';
 									button.innerHTML = 'Recruited';
 								}
+								setOtherRecruits(temp2);
 								bindRecruitButton();
 							});
 						return false;
@@ -334,9 +351,10 @@
 								_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
 								if (ctx.params.action === 'Lead' || !ctx.params.action) {
 									_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', r.prospect);
+									// delay
 									setTimeout(function () {
-										bindStatusChange(_$('#prospect_status_' + r.prospect._id + '_select'));
-									}, 1000);
+										bindRowEvents(_$('#prospect_status_' + r.prospect._id + '_select'), void 0, _$('#prospect_note_' + r.prospect._id + '_textarea'));
+									}, 500);
 								}
 							})
 							.onerror(function (e) {
@@ -391,7 +409,23 @@
 					// bind status changes
 					i = temp.length;
 					while (i--)
-						bindStatusChange(_$('#prospect_status_' + temp[i]._id + '_select'), temp[i]._id + '|' + temp[i].status);
+						bindRowEvents(_$('#prospect_status_' + temp[i]._id + '_select'), temp[i]._id + '|' + temp[i].status, _$('#prospect_note_' + temp[i]._id + '_textarea'));
+				},
+				setOtherRecruits = function (others) {
+					var html = '',
+						i = others.length;
+					while (i--) {
+						others[i].created_at = new Date(others[i].created_at).toDateString();
+						others[i].note = others[i].note || 'N/A';
+						html += t('others_prospect', others[i]);
+					}
+					_$('#prospect_result_tbody').innerHTML += html;
+					if (others.length === 0) {
+						_$('#other_prospects_count_td').innerHTML = 'No one recruited this channel yet.';
+					}
+					else {
+						_$('#other_prospects_count_td').innerHTML = others.length + ' recruiter(s) have already recruited this channel';
+					}
 				},
 				getProspects = function () {
 					curl.get(api + 'prospects')

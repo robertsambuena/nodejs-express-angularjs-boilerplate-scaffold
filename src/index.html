@@ -223,7 +223,7 @@
 						<th></th>
 						<th>Channel</th>
 						<th>Status</th>
-						<th>Note</th>
+						<th>Note (automatically saves)</th>
 					</tr>
 				</thead>
 				<tbody id="prospect_table_tbody"></tbody>
@@ -247,33 +247,49 @@
 					</select>
 				</td>
 				<td>
-					<textarea placeholder="Add a note here...">{note}</textarea>
-					<!-- <br /> -->
-					<button>Save</button>
+					<textarea id="prospect_note_{_id}_textarea" placeholder="Add a note here..." data-id="{_id}">{note}</textarea>
 				</td>
 			</tr>
 		</template>
 
 		<template id="prospect_result_tmpl">
 			<table id="prospect_result_table">
-				<tbody>
+				<tbody id="prospect_result_tbody">
 					<tr>
-						<td rowspan="3"><img src="{img}" width="88px" height="88px"/></td>
-						<td id="prospect_title_td">
+						<td rowspan="2"><img src="{img}" width="88px" height="88px"/></td>
+						<td id="prospect_title_td" colspan="3">
 							{title}
 							<span id="prospect_videos_span"> {videos} videos</span>
 						</td>
 						<td id="prospect_views_td">{views} <small>views</small></td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan="3">
 							<button id="recruit_button">Recruit!</button>
 							<span id="prospect_subscribers_span">{subscribers} subscribers</span>
 						</td>
 						<td id="prospect_rating_td">{rating}</td>
 					</tr>
+					<tr id="other_prospects_count_tr">
+						<td colspan="5" id="other_prospects_count_td"></td>
+					</tr>
+					<tr id="other_prospects_header">
+						<td colspan="2">Recruiter</td>
+						<td>Date Recruited</td>
+						<td>Curent Status</td>
+						<td>Recruiter's Note</td>
+					</tr>
 				</tbody>
 			</table>
+		</template>
+
+		<template id="others_prospect_tmpl">
+			<tr class="others_prospect_tr">
+				<td colspan="2">{recruiter_email}</td>
+				<td>{created_at}</td>
+				<td>{status}</td>
+				<td>{note}</td>
+			</tr>
 		</template>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
