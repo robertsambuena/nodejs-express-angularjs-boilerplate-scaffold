@@ -309,6 +309,7 @@
 									search_result.owner = res.snippet.title;
 									search_result.thumbnail = res.snippet.thumbnails.default.url;
 									temp = t('prospect_result', {
+										scm : res.scm || 'none',
 										img : res.snippet.thumbnails.default.url,
 										title : res.snippet.title,
 										subscribers : res.statistics.subscriberCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
@@ -321,13 +322,14 @@
 							.finally(function () {
 								_$('#prospect_result_div').innerHTML = temp;
 								button = _$('#recruit_button');
-								console.log(self);
 								if (self) {
 									button.disabled = true;
 									button.className = 'disabled';
 									button.innerHTML = 'Recruited';
 								}
-								setOtherRecruits(temp2);
+								if (temp2) {
+									setOtherRecruits(temp2);
+								}
 								bindRecruitButton();
 							});
 						return false;
@@ -419,11 +421,11 @@
 						others[i].note = others[i].note || 'N/A';
 						html += t('others_prospect', others[i]);
 					}
-					_$('#prospect_result_tbody').innerHTML += html;
 					if (others.length === 0) {
 						_$('#other_prospects_count_td').innerHTML = 'No one recruited this channel yet.';
 					}
 					else {
+						_$('#prospect_result_tbody').innerHTML += html;
 						_$('#other_prospects_count_td').innerHTML = others.length + ' recruiter(s) have already recruited this channel';
 					}
 				},
