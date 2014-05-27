@@ -334,7 +334,9 @@
 								_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
 								if (ctx.params.action === 'Lead' || !ctx.params.action) {
 									_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', r.prospect);
-									bindStatusChange(_$('#prospect_status_' + r.prospect._id + '_select');
+									setTimeout(function () {
+										bindStatusChange(_$('#prospect_status_' + r.prospect._id + '_select'));
+									}, 1000);
 								}
 							})
 							.onerror(function (e) {
