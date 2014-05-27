@@ -231,12 +231,12 @@
 		</template>
 
 		<template id="prospect_result_tr_tmpl">
-			<tr>
-				<td><input type="checkbox" value="{id}"/></td>
+			<tr id="prospect_{_id}_tr">
+				<td><input type="checkbox" value="{_id}"/></td>
 				<td><img src="{thumbnail}" width="88px" height="88px"/></td>
 				<td>{owner}</td>
 				<td>
-					<select id="">
+					<select id="prospect_status_{_id}_select">
 						<option value="Lead">Lead</option>
 						<option value="Contacted">Contacted</option>
 						<option value="Pitched">Pitched</option>
@@ -246,7 +246,11 @@
 						<option value="Channel (won)">Channel (won)</option>
 					</select>
 				</td>
-				<td>{note}</td>
+				<td>
+					<textarea placeholder="Add a note here...">{note}</textarea>
+					<!-- <br /> -->
+					<button>Save</button>
+				</td>
 			</tr>
 		</template>
 

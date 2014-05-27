@@ -220,9 +220,37 @@
 				prospects,
 				bindDeleteButton = function () {
 					_$('#delete_prospect_button').addEventListener('click', function (e) {
-						toArray(_$('option:checked')).map(function (a) {
-							return a.value
-						});
+						var ids = toArray(_$('input:checked'))
+									.map(function (a) {
+										return a.value;
+									});
+
+						if (ids.length === 0)
+							return alert('Select channels that you want to delete by clicking the checkbox on the leftmost column');
+						if (!confirm('Are you sure you want to delete these prospect' + (ids.length === 1 ? '':'s') + '?'))
+							return false;
+
+						curl.delete(api + 'prospect/delete')
+							.send({ids : ids})
+							.then(function (data) {
+								ids.forEach(function (a) {
+									var e = _$('#prospect_' + a + '_tr');
+									e.parentNode.removeChild(e);
+								});
+								prospects = prospects.filter(function (a) {
+									var toBeSaved = !~ids.indexOf('' + a._id),
+										button = _$('#recruit_button');
+
+									if (!toBeSaved && search_result.username === a.username) {
+										button.disabled = false;
+										button.className = '';
+										button.innerHTML = 'Recruit!';
+									}
+									return toBeSaved;
+`							})
+							.onerror(function (e) {
+								console.dir(e);
+							});
 					}, true);
 				},
 				bindSubmitForm = function () {
@@ -235,6 +263,7 @@
 							.then(function (res) {
 								temp2 = res.is_recruited;
 								res = res.search_result;
+								search_result = {};
 								if (res.items.length > 0) {
 									res = res.items[0];
 									search_result.username = e.target.q.value;
@@ -269,10 +298,17 @@
 						curl.post(api + 'prospect/add')
 							.send(search_result)
 							.then(function (r) {
+								var lead_length;
 								e.target.disabled = true;
 								e.target.className = 'disabled';
 								e.target.innerHTML = 'Recruited';
-								console.dir(r);
+								prospects.push(r.prospect);
+								lead_length = prospects.filter(function (a) {
+									return a.status === 'Lead';
+								}).length;
+								r.prospect.note = (r.prospect.note || 'None as of the moment');
+								_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', r.prospect);
+								_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
 							})
 							.onerror(function (e) {
 								console.dir(e);
@@ -310,12 +346,12 @@
 
 					_$('[href="/prospect/' + status + '"]')[0].className = 'selected';
 
+					_$('#prospect_table_tbody').innerHTML = '';
 					while (i--) {
-						temp[i].note = (temp[i].note || 'None as of the moment');
-						html += t('prospect_result_tr', temp[i]);
+						temp[i].note = (temp[i].note || '');
+						_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', temp[i]);
 					}
 
-					_$('#prospect_table_tbody').innerHTML = html;
 					_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
 					_$('#contacted_a').innerHTML = 'Contacted '  + (contacted_length === 0 ? '' : ('[' + contacted_length + ']'));
 					_$('#pitched_a').innerHTML = 'Pitched '  + (pitched_length === 0 ? '' : ('[' + pitched_length + ']'));
@@ -324,19 +360,19 @@
 					_$('#closed_lost_a').innerHTML = 'Closed (lost) '  + (closed_lost_length === 0 ? '' : ('[' + closed_lost_length + ']'));
 					_$('#closed_won_a').innerHTML = 'Closed (won) '  + (closed_won_length === 0 ? '' : ('[' + closed_won_length + ']'));
 
-					bindDeleteButton();
+				},
+				getProspects = function () {
+					curl.get(api + 'prospects')
+						.then(function (a) {
+							prospects =  a;
+							content_div.innerHTML = t('prospect');
+							bindSubmitForm();
+							bindDeleteButton();
+							_$('#prospect_search_input').focus();
+							setProspects(ctx.params.action || 'Lead');
+						});
 				};
-
-
-
-			curl.get(api + 'prospects')
-				.then(function (a) {
-					prospects =  a;
-					content_div.innerHTML = t('prospect');
-					_$('#prospect_search_input').focus();
-					bindSubmitForm();
-					setProspects(ctx.params.action || 'Lead');
-				});
+			getProspects();
 		},
 
 
