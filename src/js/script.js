@@ -1,5 +1,6 @@
 (function (root) {
 
+
 	var user_info,
 		doc = root.document,
 		api = 'http://localhost:8000/',
@@ -288,6 +289,15 @@
 					setProspects(ctx.params.action || 'Lead');
 				});
 		},
+        viewApplicants = function() {
+            if(user_info){
+
+                content_div.innerHTML = t('admin');
+
+            } else
+                logout();
+
+        },
 
 
 
@@ -302,6 +312,7 @@
 					avatar : user_info.profile_info.avatar
 				});
 				_$('#profile_avatar_img').addEventListener('click', logout, true);
+
 			}
 			else
 				_$('#profile_nav_div').innerHTML = t('signin', { api : api });
@@ -378,6 +389,7 @@
 	page('/channels/:action?', channels);
 	page('/error', error);
 	page('/prospect/:action?', prospect);
+    page('/admin', viewApplicants);
 	page('*', notFound);
 
 
