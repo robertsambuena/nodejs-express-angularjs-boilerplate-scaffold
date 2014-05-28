@@ -54,7 +54,6 @@
 				var form = e.target,
 					data = serialize(form);
 				e.preventDefault();
-				console.dir(data);
 				// validate data
 				curl.post(api + 'register')
 					.send(data)
@@ -189,7 +188,6 @@
 					default :
 						curl.get(api + 'channels')
 							.then(function (data) {
-								console.dir(data);
 								user_info.channels = data;
 								content_div.innerHTML = t('channels', {
 									api : api,

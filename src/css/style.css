@@ -258,11 +258,10 @@ header{
 	background: #CC181e;
 }
 #prospects_ul li a:hover, #prospects_ul li a.selected{
-	font-size: 15px;
 	background: #C42B1B;
 	font-weight: bold;
 	color: #FFF;
-	border-bottom: 4px solid #000;
+	border-bottom: 3px solid #000;
 }
 #prospect_result_table{
 	font-family: Arial;
