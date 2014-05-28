@@ -63,7 +63,8 @@
 
 				req.open(this.method, this.url, true);
 				req.withCredentials = true;
-				this.headers['Accept'] = 'application/json');
+				this.headers['Accept'] = 'application/json';
+
 
 				if (this.method !== 'GET')
 					this.headers['Content-Type', 'application/x-www-form-urlencoded'];
