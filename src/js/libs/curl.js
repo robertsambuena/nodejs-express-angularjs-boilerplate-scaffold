@@ -16,8 +16,13 @@
 		Request = function (method) {
 			this.started = false;
 			this.method = method;
+			this.headers = {};
 			this.to = function (url) {
 				this.url = url;
+				return this;
+			};
+			this.addHeader = function (key, value) {
+				this.headers[key] = value;
 				return this;
 			};
 			this.then = function (cb) {
@@ -58,10 +63,14 @@
 
 				req.open(this.method, this.url, true);
 				req.withCredentials = true;
-				req.setRequestHeader('Accept', 'application/json');
+				this.headers['Accept'] = 'application/json';
+
 
 				if (this.method !== 'GET')
-					req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+					this.headers['Content-Type', 'application/x-www-form-urlencoded'];
+
+				for (i in this.headers)
+					req.setRequestHeader(i, this.headers[i]);
 
 				req.onreadystatechange = function () {
 					if (req.readyState === 4) {

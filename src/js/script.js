@@ -442,6 +442,57 @@
 		},
 
 
+		// sherwin's
+        parseQueryString = function( queryString ) {
+            var params = {}, queries, temp, i, l;
+
+            // Split into key/value pairs
+            queries = queryString.split("&");
+
+            // Convert the array of strings into an object
+            for ( i = 0, l = queries.length; i < l; i++ ) {
+                temp = queries[i].split('=');
+                params[temp[0]] = temp[1];
+            }
+
+            return params;
+        },
+        viewApplicants = function() {
+            var qs = parseQueryString(window.location.search.substring(1)),
+                size = qs.size || 10,
+                page = qs.page || 1;
+
+            if(user_info){
+                curl.post(api + 'admin/identify')
+                    .send()
+                    .then(function (r){
+                        if(r){
+                            if(r.type!=="admin"){
+                                _$('#admin_a').parentNode.innerHTML = "";
+                            }
+                        }
+                    })
+                    .onerror(function (e){
+                        console.log(e);
+                    });
+
+                curl.get(api+'admin/partners')
+                    .send({page: page, size : size})
+                    .then(function(d){
+                        console.log(d);
+                    })
+                    .onerror(function(e){
+
+                    });
+
+                content_div.innerHTML = t('admin');
+
+            } else
+                logout();
+
+        },
+
+
 
 
 		/**
@@ -537,9 +588,8 @@
 	page('/channels/:action?', channels);
 	page('/error', error);
 	page('/prospect/:action?', prospect);
+    page('/admin/:action?', viewApplicants);
 	page('*', notFound);
-
-
 
 
 	/**
