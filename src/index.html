@@ -208,86 +208,111 @@
             Hi im about page, and you are?
         </template>
 
+<<<<<<< HEAD
         <template id="not_found_tmpl">
             Page Not Found :(
         </template>
 
-        <template id="prospect_tmpl">
-            <form id="search_form">
-                Search&nbsp;<input type="text" name="q" placeholder="Enter prospect's username" id="prospect_search_input"/>
-                <input type="submit" class="disappear"/>
-            </form>
-            <div id="prospect_result_div"></div>
-            <hr />
-            <div id="prospects_ul_wrapper">
-                <ul id="prospects_ul">
-                    <li><a href="/prospect/Lead">Leads</a></li>
-                    <li><a href="/prospect/Contacted">Contacted</a></li>
-                    <li><a href="/prospect/Pitched">Pitched</a></li>
-                    <li><a href="/prospect/Demo">Demo</a></li>
-                    <li><a href="/prospect/Negotiating">Negotiating</a></li>
-                    <li><a href="/prospect/Closed (lost)">Closed (lost)</a></li>
-                    <li><a href="/prospect/Closed (won)">Closed (won)</a></li>
-                </ul>
-            </div>
-            <table id="prospects_table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Channel</th>
-                        <th>Status</th>
-                        <th>Note</th>
-                    </tr>
-                </thead>
-                <tbody id="prospect_table_tbody"></tbody>
-            </table>
-        </template>
+		<template id="prospect_tmpl">
+			<form id="search_form">
+				Search&nbsp;<input type="text" name="q" placeholder="Enter prospect's username" id="prospect_search_input"/>
+				<input type="submit" class="disappear"/>
+			</form>
+			<div id="prospect_result_div"></div>
+			<hr />
+			<div id="prospects_ul_wrapper">
+				<ul id="prospects_ul">
+					<li><a href="/prospect/Lead" id="leads_a">Leads</a></li>
+					<li><a href="/prospect/Contacted" id="contacted_a">Contacted</a></li>
+					<li><a href="/prospect/Pitched" id="pitched_a">Pitched</a></li>
+					<li><a href="/prospect/Demo" id="demo_a">Demo</a></li>
+					<li><a href="/prospect/Negotiating" id="negotiating_a">Negotiating</a></li>
+					<li><a href="/prospect/Closed (lost)" id="closed_lost_a">Closed (lost)</a></li>
+					<li><a href="/prospect/Closed (won)" id="closed_won_a">Closed (won)</a></li>
+				</ul>
+			</div>
+			<table id="prospects_table">
+				<thead>
+					<tr>
+						<th>
+							<button id="delete_prospect_button">
+								<i class="fa fa-trash-o fa-lg"></i>
+							</button>
+						</th>
+						<th></th>
+						<th>Channel</th>
+						<th>Status</th>
+						<th>Note (automatically saves)</th>
+					</tr>
+				</thead>
+				<tbody id="prospect_table_tbody"></tbody>
+			</table>
+		</template>
 
-        <template id="prospect_result_tr_tmpl">
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td><img src="{thumbnail}" width="88px" height="88px"/></td>
-                <td>{owner}</td>
-                <td>
-                    <select id="">
-                        <option value="Lead">Lead</option>
-                        <option value="Contacted">Contacted</option>
-                        <option value="Pitched">Pitched</option>
-                        <option value="Demo">Demo</option>
-                        <option value="Negotiating">Negotiating</option>
-                        <option value="Channel (lost)">Channel (lost)</option>
-                        <option value="Channel (won)">Channel (won)</option>
-                    </select>
-                </td>
-                <td>{note}</td>
-            </tr>
-        </template>
+		<template id="prospect_result_tr_tmpl">
+			<tr id="prospect_{_id}_tr">
+				<td><input type="checkbox" value="{_id}"/></td>
+				<td><img src="{thumbnail}" width="88px" height="88px"/></td>
+				<td>{owner}</td>
+				<td>
+					<select id="prospect_status_{_id}_select">
+						<option value="{_id}|Lead">Lead</option>
+						<option value="{_id}|Contacted">Contacted</option>
+						<option value="{_id}|Pitched">Pitched</option>
+						<option value="{_id}|Demo">Demo</option>
+						<option value="{_id}|Negotiating">Negotiating</option>
+						<option value="{_id}|Closed (lost)">Closed (lost)</option>
+						<option value="{_id}|Closed (won)">Closed (won)</option>
+					</select>
+				</td>
+				<td>
+					<textarea id="prospect_note_{_id}_textarea" placeholder="Add a note here..." data-id="{_id}">{note}</textarea>
+				</td>
+			</tr>
+		</template>
 
-        <template id="prospect_result_tmpl">
-            <table id="prospect_result_table">
-                <tbody>
-                    <tr>
-                        <td rowspan="3"><img src="{img}" width="88px" height="88px"/></td>
-                        <td id="prospect_title_td">
-                            {title}
-                            <span id="prospect_videos_span"> {videos} videos</span>
-                        </td>
-                        <td id="prospect_views_td">{views} <small>views</small></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button id="recruit_button">Recruit!</button>
-                            <span id="prospect_subscribers_span">{subscribers} subscribers</span>
-                        </td>
-                        <td id="prospect_rating_td">{rating}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </template>
+		<template id="prospect_result_tmpl">
+			<table id="prospect_result_table">
+				<tbody id="prospect_result_tbody">
+					<tr>
+						<td rowspan="2"><img src="{img}" width="88px" height="88px"/></td>
+						<td id="prospect_title_td" colspan="3">
+							{title}
+							<span id="prospect_videos_span"> {videos} videos [SCM - {scm}]</span>
+						</td>
+						<td id="prospect_views_td">{views} <small>views</small></td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<button id="recruit_button">Recruit!</button>
+							<span id="prospect_subscribers_span">{subscribers} subscribers</span>
+						</td>
+						<td id="prospect_rating_td">{rating}</td>
+					</tr>
+					<tr id="other_prospects_count_tr">
+						<td colspan="5" id="other_prospects_count_td"></td>
+					</tr>
+					<tr id="other_prospects_header">
+						<td colspan="2">Recruiter</td>
+						<td>Date Recruited</td>
+						<td>Curent Status</td>
+						<td>Recruiter's Note</td>
+					</tr>
+				</tbody>
+			</table>
+		</template>
 
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
-        <script type="text/javascript" src="/min.js"></script>
+		<template id="others_prospect_tmpl">
+			<tr class="others_prospect_tr">
+				<td colspan="2">{recruiter_email}</td>
+				<td>{created_at}</td>
+				<td>{status}</td>
+				<td>{note}</td>
+			</tr>
+		</template>
+
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
+		<script type="text/javascript" src="/min.js"></script>
     </body>
 
 </html>

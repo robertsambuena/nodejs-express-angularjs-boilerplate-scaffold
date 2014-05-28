@@ -219,18 +219,98 @@
 		prospect = function (ctx) {
 			var search_result = {},
 				prospects,
+				bindDeleteButton = function () {
+					_$('#delete_prospect_button').addEventListener('click', function (e) {
+						var ids = toArray(_$('input:checked'))
+									.map(function (a) {
+										return a.value;
+									});
+
+						if (ids.length === 0)
+							return alert('Select channels that you want to delete by clicking the checkbox on the leftmost column');
+						if (!confirm('Are you sure you want to delete these prospect' + (ids.length === 1 ? '':'s') + '?'))
+							return false;
+
+						curl.delete(api + 'prospect/delete')
+							.send({ids : ids})
+							.then(function (data) {
+								ids.forEach(function (a) {
+									var e = _$('#prospect_' + a + '_tr');
+									e.parentNode.removeChild(e);
+								});
+
+								prospects = prospects.filter(function (a) {
+									var toBeSaved = !~ids.indexOf('' + a._id),
+										button = _$('#recruit_button');
+
+									if (!toBeSaved && search_result.username === a.username) {
+										button.disabled = false;
+										button.className = '';
+										button.innerHTML = 'Recruit!';
+									}
+
+									return toBeSaved;
+								});
+
+								setProspects(ctx.params.action || 'Lead');
+							})
+							.onerror(function (e) {
+								console.dir(e);
+							});
+					}, true);
+				},
+				bindRowEvents = function (select, status, textarea) {
+					status && (select.value = status);
+					select.addEventListener('change', function (e) {
+						curl.put(api + 'prospect/update')
+							.send({
+								id : parseInt(e.target.value),
+								status : e.target.value.split('|')[1]
+							})
+							.then(function (data) {
+								prospects.filter(function (a) {
+									return a._id === parseInt(e.target.value);
+								})[0].status = e.target.value.split('|')[1];
+								setProspects(ctx.params.action || 'Lead');
+							})
+							.onerror(function (err) {
+								console.dir(err);
+							});
+					});
+					textarea.addEventListener('keyup', function (e) {
+						curl.put(api + 'prospect/update')
+							.send({
+								id : e.target.getAttribute('data-id'),
+								note : e.target.value || ' '
+							})
+							.then(function (data) {
+								console.log(data);
+							})
+							.onerror(function (err) {
+								console.dir(err);
+							});
+					});
+				},
 				bindSubmitForm = function () {
 					_$('#search_form').addEventListener('submit', function (e) {
-						var temp = '<br />Channel not found.';
+						var temp = '<br />Channel not found.',
+							button,
+							self,
+							temp2;
 						e.preventDefault();
 						curl.get(api + 'channel/search/' + encodeURIComponent(e.target.q.value))
 							.then(function (res) {
+								temp2 = res.is_recruited;
+								self = res.self;
+								res = res.search_result;
+								search_result = {};
 								if (res.items.length > 0) {
 									res = res.items[0];
 									search_result.username = e.target.q.value;
 									search_result.owner = res.snippet.title;
 									search_result.thumbnail = res.snippet.thumbnails.default.url;
 									temp = t('prospect_result', {
+										scm : res.scm || 'none',
 										img : res.snippet.thumbnails.default.url,
 										title : res.snippet.title,
 										subscribers : res.statistics.subscriberCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
@@ -242,6 +322,15 @@
 							})
 							.finally(function () {
 								_$('#prospect_result_div').innerHTML = temp;
+								button = _$('#recruit_button');
+								if (self) {
+									button.disabled = true;
+									button.className = 'disabled';
+									button.innerHTML = 'Recruited';
+								}
+								if (temp2) {
+									setOtherRecruits(temp2);
+								}
 								bindRecruitButton();
 							});
 						return false;
@@ -253,10 +342,23 @@
 						curl.post(api + 'prospect/add')
 							.send(search_result)
 							.then(function (r) {
+								var lead_length;
 								e.target.disabled = true;
 								e.target.className = 'disabled';
 								e.target.innerHTML = 'Recruited';
-								console.dir(r);
+								r.prospect.note = (r.prospect.note || 'None as of the moment');
+								prospects.push(r.prospect);
+								lead_length = prospects.filter(function (a) {
+									return a.status === 'Lead';
+								}).length;
+								_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
+								if (ctx.params.action === 'Lead' || !ctx.params.action) {
+									_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', r.prospect);
+									// delay
+									setTimeout(function () {
+										bindRowEvents(_$('#prospect_status_' + r.prospect._id + '_select'), void 0, _$('#prospect_note_' + r.prospect._id + '_textarea'));
+									}, 500);
+								}
 							})
 							.onerror(function (e) {
 								console.dir(e);
@@ -268,26 +370,78 @@
 							return a.status === status;
 						}),
 						i = temp.length,
-						html = '';
+						html = '',
+						lead_length = prospects.filter(function (a) {
+							return a.status === 'Lead';
+						}).length,
+						contacted_length = prospects.filter(function (a) {
+							return a.status === 'Contacted';
+						}).length,
+						pitched_length = prospects.filter(function (a) {
+							return a.status === 'Pitched';
+						}).length,
+						demo_length = prospects.filter(function (a) {
+							return a.status === 'Demo';
+						}).length,
+						negotiating_length = prospects.filter(function (a) {
+							return a.status === 'Negotiating';
+						}).length,
+						closed_lost_length = prospects.filter(function (a) {
+							return a.status === 'Closed (lost)';
+						}).length,
+						closed_won_length = prospects.filter(function (a) {
+							return a.status === 'Closed (won)';
+						}).length;
+
+					_$('[href="/prospect/' + status + '"]')[0].className = 'selected';
 
 					while (i--) {
-						temp[i].note = (temp[i].note || 'None as of the moment');
+						temp[i].note = (temp[i].note || '');
 						html += t('prospect_result_tr', temp[i]);
 					}
 
 					_$('#prospect_table_tbody').innerHTML = html;
+					_$('#demo_a').innerHTML = 'Demo '  + (demo_length === 0 ? '' : ('[' + demo_length + ']'));
+					_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
+					_$('#pitched_a').innerHTML = 'Pitched '  + (pitched_length === 0 ? '' : ('[' + pitched_length + ']'));
+					_$('#contacted_a').innerHTML = 'Contacted '  + (contacted_length === 0 ? '' : ('[' + contacted_length + ']'));
+					_$('#closed_won_a').innerHTML = 'Closed (won) '  + (closed_won_length === 0 ? '' : ('[' + closed_won_length + ']'));
+					_$('#negotiating_a').innerHTML = 'Negotiating '  + (negotiating_length === 0 ? '' : ('[' + negotiating_length + ']'));
+					_$('#closed_lost_a').innerHTML = 'Closed (lost) '  + (closed_lost_length === 0 ? '' : ('[' + closed_lost_length + ']'));
+
+					// bind status changes
+					i = temp.length;
+					while (i--)
+						bindRowEvents(_$('#prospect_status_' + temp[i]._id + '_select'), temp[i]._id + '|' + temp[i].status, _$('#prospect_note_' + temp[i]._id + '_textarea'));
+				},
+				setOtherRecruits = function (others) {
+					var html = '',
+						i = others.length;
+					while (i--) {
+						others[i].created_at = new Date(others[i].created_at).toDateString();
+						others[i].note = others[i].note || 'N/A';
+						html += t('others_prospect', others[i]);
+					}
+					if (others.length === 0) {
+						_$('#other_prospects_count_td').innerHTML = 'No one recruited this channel yet.';
+					}
+					else {
+						_$('#prospect_result_tbody').innerHTML += html;
+						_$('#other_prospects_count_td').innerHTML = others.length + ' recruiter(s) have already recruited this channel';
+					}
+				},
+				getProspects = function () {
+					curl.get(api + 'prospects')
+						.then(function (a) {
+							prospects =  a;
+							content_div.innerHTML = t('prospect');
+							bindSubmitForm();
+							bindDeleteButton();
+							_$('#prospect_search_input').focus();
+							setProspects(ctx.params.action || 'Lead');
+						});
 				};
-
-
-
-			curl.get(api + 'prospects')
-				.then(function (a) {
-					prospects =  a;
-					content_div.innerHTML = t('prospect');
-					_$('#prospect_search_input').focus();
-					bindSubmitForm();
-					setProspects(ctx.params.action || 'Lead');
-				});
+			getProspects();
 		},
         viewApplicants = function() {
             if(user_info){
@@ -368,6 +522,13 @@
 			if (count >= 250000) return 'Below Average';
 			if (count >= 100000) return 'Poor';
 			return 'Very Poor :(';
+		},
+		toArray = function (nl) {
+			var arr = [],
+				i,
+				l;
+			for (i =- 1, l = nl.length >>> 0; ++i !== l; arr[i] = nl[i]);
+			return arr;
 		}
 		;
 
