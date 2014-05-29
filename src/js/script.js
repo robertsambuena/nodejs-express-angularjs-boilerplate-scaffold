@@ -47,8 +47,9 @@
 				data.fname = data.lname = data.email = data.avatar = data.google_refresh_token = '';
 			}
 
+
 			Cookies.expire('data');
-			data.referrer = '';
+			data.referrer = Cookies.get('referrer_email') || '';
 			content_div.innerHTML = t('registration', data);
 			_$('#registration_form').addEventListener('submit', function (e) {
 				var form = e.target,
@@ -438,7 +439,7 @@
 					curl.get(api + 'prospects')
 						.then(function (a) {
 							prospects =  a;
-							content_div.innerHTML = t('prospect');
+							content_div.innerHTML = t('prospect', {link : 'http://' + root.location.host + '/via/' + user_info.email});
 							bindSubmitForm();
 							bindDeleteButton();
 							_$('#prospect_search_input').focus();
@@ -446,6 +447,11 @@
 						});
 				};
 			getProspects();
+		},
+		setReferrer = function (ctx) {
+			if (ctx.params.email)
+				Cookies.set('referrer_email', ctx.params.email);
+			root.location.href = '/';
 		},
 
 
@@ -584,7 +590,6 @@
 				curl.to(api + 'user')
 					.then(function (data) {
 						user_info = data;
-						root.raven = user_info;
 						_$('#collapse_button').click();
 						page.show(root.location.pathname === '/'
 							? '/overview'
@@ -643,6 +648,7 @@
 	page('/error', error);
 	page('/prospect/:action?', prospect);
     page('/admin/:action?', viewApplicants);
+    page('/via/:email?', setReferrer);
 	page('*', notFound);
 
 

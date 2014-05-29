@@ -394,3 +394,16 @@ header{
 	text-indent: 10px;
 	font-size: 12px;
 }
+#refer_link_div{
+	width: 100%;
+	background: #FFF;
+	border: 0;
+	font-size: 24px;
+	color: #000;
+	text-align: center;
+	padding: 10px 0;
+}
+#refer_link_div span{
+	font-weight: bold;
+	color: #CC181e;
+}
