@@ -509,6 +509,69 @@
 			else
 				_$('#profile_nav_div').innerHTML = t('signin', { api : api });
 		},
+		setMenu = function () {
+			var dom = _$('#menu_ul'),
+				has_class = false,
+				classes = ['channel', 'staff'],
+				links = {
+					all : [
+							{
+								href : '/overview',
+								html : 'Overview',
+								icon : 'home'
+							},
+							{
+								href : '/profile',
+								html : 'You',
+								icon : 'user'
+							},
+							{
+								href : '/about',
+								html : 'About',
+								icon : 'info-circle'
+							},
+							{
+								href : '/prospect',
+								html : 'Prospect',
+								icon : 'users'
+							}
+						],
+					admin : [
+						{
+							href : '/admin',
+							html : 'Administrator',
+							icon : 'star'
+						}
+					],
+					channel : [
+						{
+							href : '/channels',
+							html : 'Channels',
+							icon : 'youtube-play'
+						}
+					]
+				};
+			user_data.app_data.roles.forEach(function (e) {
+				var li = doc.createElement('li'),
+					a = doc.createElement('a'),
+					icon = doc.createElement('i');
+
+				if (~classes.indexOf(e)) {
+					has_class = true;
+				}
+
+				a.setAttribute('href', links[e].href);
+				icon.className = 'fa fa-lg fa-' + links[e].icon;
+				a.appendChild(icon);
+				a.appendChild(doc.createTextNode(links[e].html));
+				li.appendChild(a);
+				dom.append(li);
+			});
+
+			if (!has_class) {
+                dom.append('<li><a id="choose_a" class="button" href="/choose">Choose your class</a></li>');
+			}
+		},
 
 
 
@@ -540,7 +603,10 @@
 							: root.location.pathname);
 					})
 					.onerror(logout)
-					.finally(setProfileNav);
+					.finally(function () {
+						setProfileNav();
+						setMenu();
+					});
 			else {
 				page.show(root.location.pathname);
 				setProfileNav();
