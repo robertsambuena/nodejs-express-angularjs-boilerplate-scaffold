@@ -514,63 +514,40 @@
 				has_class = false,
 				classes = ['channel', 'staff'],
 				links = {
+					// format : href, html, icon
 					all : [
-							{
-								href : '/overview',
-								html : 'Overview',
-								icon : 'home'
-							},
-							{
-								href : '/profile',
-								html : 'You',
-								icon : 'user'
-							},
-							{
-								href : '/about',
-								html : 'About',
-								icon : 'info-circle'
-							},
-							{
-								href : '/prospect',
-								html : 'Prospect',
-								icon : 'users'
-							}
+							['/overview', 'Overview', 'home'],
+							['/profile', 'You', 'user'],
+							['/about', 'About', 'info-circle'],
+							['/prospect', 'Prospect', 'users']
 						],
 					admin : [
-						{
-							href : '/admin',
-							html : 'Administrator',
-							icon : 'star'
-						}
+						['/admin', 'Administrator', 'star']
 					],
 					channel : [
-						{
-							href : '/channels',
-							html : 'Channels',
-							icon : 'youtube-play'
-						}
+						['/channels', 'Channels', 'youtube-play']
 					]
 				};
+
 			user_data.app_data.roles.forEach(function (e) {
-				var li = doc.createElement('li'),
-					a = doc.createElement('a'),
-					icon = doc.createElement('i');
-
-				if (~classes.indexOf(e)) {
+				if (~classes.indexOf(e))
 					has_class = true;
-				}
 
-				a.setAttribute('href', links[e].href);
-				icon.className = 'fa fa-lg fa-' + links[e].icon;
-				a.appendChild(icon);
-				a.appendChild(doc.createTextNode(links[e].html));
-				li.appendChild(a);
-				dom.append(li);
+				links[e].forEach(function (e) {
+					var li = doc.createElement('li'),
+						a = doc.createElement('a'),
+						icon = doc.createElement('i');
+					a.setAttribute('href', e[0]);
+					icon.className = 'fa fa-lg fa-' + e[2];
+					a.appendChild(icon);
+					a.appendChild(doc.createTextNode(e[1]));
+					li.appendChild(a);
+					dom.append(li);
+				});
 			});
 
-			if (!has_class) {
+			if (!has_class)
                 dom.append('<li><a id="choose_a" class="button" href="/choose">Choose your class</a></li>');
-			}
 		},
 
 
