@@ -48,7 +48,8 @@
 			this.send = function (data) {
 				var req = new XMLHttpRequest(),
 					self = this,
-					payload = '';
+					payload = '',
+					i;
 
 				this.started = true;
 				NProgress.start();
@@ -67,7 +68,7 @@
 
 
 				if (this.method !== 'GET')
-					this.headers['Content-Type', 'application/x-www-form-urlencoded'];
+					this.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
 				for (i in this.headers)
 					req.setRequestHeader(i, this.headers[i]);

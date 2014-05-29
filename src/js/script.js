@@ -145,7 +145,7 @@
 				case 'accept' :
 					curl.post(api + 'staff')
 						.then(function (data) {
-							console.dir(data);
+							setMenu();
 						});
 					break;
 			}
@@ -182,6 +182,7 @@
 					case 'accept' :
 						curl.post(api + 'partner')
 							.then(function (data) {
+								setMenu();
 								page.show('/channels');
 							});
 						break;
@@ -512,7 +513,7 @@
 		setMenu = function () {
 			var dom = _$('#menu_ul'),
 				has_class = false,
-				classes = ['channel', 'staff'],
+				classes = ['channel'],
 				links = {
 					// format : href, html, icon
 					all : [
@@ -529,11 +530,12 @@
 					]
 				};
 
-			user_data.app_data.roles.forEach(function (e) {
+			dom.innerHTML = '';
+			user_info.app_data.roles.forEach(function (e) {
 				if (~classes.indexOf(e))
 					has_class = true;
 
-				links[e].forEach(function (e) {
+				links[e] && links[e].forEach(function (e) {
 					var li = doc.createElement('li'),
 						a = doc.createElement('a'),
 						icon = doc.createElement('i');
@@ -542,12 +544,14 @@
 					a.appendChild(icon);
 					a.appendChild(doc.createTextNode(e[1]));
 					li.appendChild(a);
-					dom.append(li);
+					dom.appendChild(li);
 				});
 			});
 
 			if (!has_class)
-                dom.append('<li><a id="choose_a" class="button" href="/choose">Choose your class</a></li>');
+                dom.innerHTML += '<li><a id="choose_a" class="button" href="/choose">Choose your class</a></li>';
+
+			page.show(root.location.pathname);
 		},
 
 
@@ -574,6 +578,7 @@
 				curl.to(api + 'user')
 					.then(function (data) {
 						user_info = data;
+						root.raven = user_info;
 						_$('#collapse_button').click();
 						page.show(root.location.pathname === '/'
 							? '/overview'
