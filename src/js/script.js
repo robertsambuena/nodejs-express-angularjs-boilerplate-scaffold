@@ -350,6 +350,7 @@
 									return a.status === 'Lead';
 								}).length;
 								_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
+								_$('.remove')[0] && _$('.remove')[0].parentNode.removeChild(_$('.remove')[0]);
 								if (ctx.params.action === 'Lead' || !ctx.params.action) {
 									_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', r.prospect);
 									// delay
@@ -398,6 +399,10 @@
 						html += t('prospect_result_tr', temp[i]);
 					}
 
+					if (temp.length === 0) {
+						html = '<tr><td colspan="5" class="remove">Start recruiting now! Just put the channel\'s username on the searchbox above and press enter.</td></tr>';
+					}
+
 					_$('#prospect_table_tbody').innerHTML = html;
 					_$('#demo_a').innerHTML = 'Demo '  + (demo_length === 0 ? '' : ('[' + demo_length + ']'));
 					_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
@@ -422,6 +427,7 @@
 					}
 					if (others.length === 0) {
 						_$('#other_prospects_count_td').innerHTML = 'No one recruited this channel yet.';
+						_$('#prospect_result_tbody').parentNode.deleteRow(3);
 					}
 					else {
 						_$('#prospect_result_tbody').innerHTML += html;
