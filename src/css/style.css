@@ -320,7 +320,7 @@ header{
 	width: 100%;
 	border-collapse: collapse;
 	border-spacing: 0px;
-	border-bottom: 4px solid #000;
+	border-bottom: 1px solid #CCC;
 }
 #prospects_table td:nth-child(1), #prospects_table th:nth-child(1){
 	width: 5%;
@@ -371,7 +371,8 @@ header{
 	color: #FFF;
 }
 #other_prospects_header td{
-	padding: 10px 0;
+	padding: 7px 0;
+	font-size: 12px;
 	background: #FFF;
 	color: #666;
 	border: 1px solid #ddd;
@@ -395,15 +396,23 @@ header{
 	font-size: 12px;
 }
 #refer_link_div{
-	width: 100%;
 	background: #FFF;
 	border: 0;
 	font-size: 24px;
 	color: #000;
 	text-align: center;
-	padding: 10px 0;
+	padding: 20px 0;
 }
 #refer_link_div span{
 	font-weight: bold;
 	color: #CC181e;
+}
+#chart_div{
+	width: 100%;
+	border-bottom: 5px solid #000;
+}
+.prospect_time_updated_span{
+	font-style: italic;
+	color: #AAA;
+	font-size: 10px;
 }
