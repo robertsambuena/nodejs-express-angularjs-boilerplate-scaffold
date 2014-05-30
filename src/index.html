@@ -41,8 +41,8 @@
             <a id="sign_in_a" href="{api}auth/google">Sign in using Google</a>
         </template>
 
-        <template id="applicants_tmpl">
-			<table id="unapproved">
+		<template id="applicants_tmpl">
+			<table id="unapproved_table">
 				<thead>
 					<tr>
 						<td>Link</td>
@@ -51,8 +51,23 @@
 						<td>View</td>
 					</tr>
 				</thead>
+				<tbody id="unapproved_contents">
+				</tbody>
 			</table>
-        </template>
+		</template>
+
+		<template id="unapproved_list_tmpl">
+			<tr>
+				<td><a href="http://www.youtube.com/channel/{_id}"><i id="fa fa-lg fa-youtube"></i></a></td>
+				<td>{channel_name}</td>
+				<td>{last30_days}</td>
+				<td><a href="/admin/view/{_id}"><button type="button" formtarget="_blank">View</button></a></td>
+			</tr>
+		</template>
+
+		<template id="empty_tmpl">
+			<h3>No data from server</h3>
+		</template>
 
         <template id="registration_tmpl">
             <form id="registration_form">
