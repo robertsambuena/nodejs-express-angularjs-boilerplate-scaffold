@@ -9,6 +9,10 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
         <link rel="stylesheet" href="/min.css" />
         <title>Freedom!</title>
+		<script type="text/javascript" src="//www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load('visualization', '1.0', {packages : ['corechart']});
+		</script>
     </head>
 
     <body>
@@ -179,10 +183,12 @@
         </template>
 
 		<template id="prospect_tmpl">
-			<div id="refer_link_div">Your refer-a-friend link : <span>{link}</span></div>
+			<div id="refer_link_div">
+				Your refer-a-friend link : <br /><span>{link}</span>
+			</div>
 			<form id="search_form">
 				Search&nbsp;<input type="text" name="q" placeholder="Enter prospect's username" id="prospect_search_input"/>
-				<input type="submit" class="disappear"/>
+				<input type="submit" class="disappear" id="search_prospect_button"/>
 			</form>
 			<div id="prospect_result_div"></div>
 			<hr />
@@ -208,11 +214,12 @@
 						<th>&nbsp;</th>
 						<th>Channel</th>
 						<th>Status</th>
-						<th>Note (automatically saves)</th>
+						<th>Note (automatically saves) </th>
 					</tr>
 				</thead>
 				<tbody id="prospect_table_tbody"></tbody>
 			</table>
+			<div id="chart_div"></div>
 		</template>
 
 		<template id="prospect_result_tr_tmpl">

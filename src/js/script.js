@@ -11,7 +11,7 @@
 			var p;
 			s = _$('#' + s + '_tmpl').innerHTML;
 			for (p in d)
-				s = s.replace(new RegExp('{'+p+'}', 'g'), d[p]);
+				s = s.replace(new RegExp('{' + p + '}', 'g'), d[p]);
 			return s;
 		},
 
@@ -46,7 +46,6 @@
 				data = {};
 				data.fname = data.lname = data.email = data.avatar = data.google_refresh_token = '';
 			}
-
 
 			Cookies.expire('data');
 			data.referrer = Cookies.get('referrer_email') || '';
@@ -217,6 +216,7 @@
 		},
 		prospect = function (ctx) {
 			var search_result = {},
+				graph_data,
 				prospects,
 				bindDeleteButton = function () {
 					_$('#delete_prospect_button').addEventListener('click', function (e) {
@@ -242,11 +242,8 @@
 									var toBeSaved = !~ids.indexOf('' + a._id),
 										button = _$('#recruit_button');
 
-									if (!toBeSaved && search_result.username === a.username) {
-										button.disabled = false;
-										button.className = '';
-										button.innerHTML = 'Recruit!';
-									}
+									if (!toBeSaved && search_result.owner === a.owner)
+										triggerEvent(_$('#search_form'), 'submit');
 
 									return toBeSaved;
 								});
@@ -292,7 +289,7 @@
 				},
 				bindSubmitForm = function () {
 					_$('#search_form').addEventListener('submit', function (e) {
-						var temp = '<br />Channel not found.',
+						var temp = false,
 							button,
 							self,
 							temp2;
@@ -320,17 +317,19 @@
 								}
 							})
 							.finally(function () {
-								_$('#prospect_result_div').innerHTML = temp;
-								button = _$('#recruit_button');
-								if (self) {
-									button.disabled = true;
-									button.className = 'disabled';
-									button.innerHTML = 'Recruited';
-								}
-								if (temp2) {
+								if (temp) {
+									_$('#prospect_result_div').innerHTML = temp;
 									setOtherRecruits(temp2);
+									button = _$('#recruit_button');
+									if (self) {
+										button.disabled = true;
+										button.className = 'disabled';
+										button.innerHTML = 'Recruited';
+									}
+									bindRecruitButton();
+								} else {
+									_$('#prospect_result_div').innerHTML = '<br />Channel not found.';
 								}
-								bindRecruitButton();
 							});
 						return false;
 					}, true);
@@ -342,16 +341,16 @@
 							.send(search_result)
 							.then(function (r) {
 								var lead_length;
-								e.target.disabled = true;
-								e.target.className = 'disabled';
-								e.target.innerHTML = 'Recruited';
-								r.prospect.note = (r.prospect.note || 'None as of the moment');
+								triggerEvent(_$('#search_form'), 'submit');
+								r.prospect.note = (r.prospect.note || '');
 								prospects.push(r.prospect);
 								lead_length = prospects.filter(function (a) {
 									return a.status === 'Lead';
 								}).length;
 								_$('#leads_a').innerHTML = 'Leads '  + (lead_length === 0 ? '' : ('[' + lead_length + ']'));
 								_$('.remove')[0] && _$('.remove')[0].parentNode.removeChild(_$('.remove')[0]);
+								graph_data[1][1]++;
+								drawChart();
 								if (ctx.params.action === 'Lead' || !ctx.params.action) {
 									_$('#prospect_table_tbody').innerHTML += t('prospect_result_tr', r.prospect);
 									// delay
@@ -417,10 +416,22 @@
 					i = temp.length;
 					while (i--)
 						bindRowEvents(_$('#prospect_status_' + temp[i]._id + '_select'), temp[i]._id + '|' + temp[i].status, _$('#prospect_note_' + temp[i]._id + '_textarea'));
+
+					drawChart([
+						['Status', 'Count'],
+						['Leads', lead_length],
+						['Contacted', contacted_length],
+						['Pitched', pitched_length],
+						['Demo', demo_length],
+						['Negotiating', negotiating_length],
+						['Closed (Lost)', closed_lost_length],
+						['Closed (Won)', closed_won_length]
+					]);
 				},
 				setOtherRecruits = function (others) {
 					var html = '',
-						i = others.length;
+						i = others.length,
+						many = (i > 1);
 					while (i--) {
 						others[i].created_at = new Date(others[i].created_at).toDateString();
 						others[i].note = others[i].note || 'N/A';
@@ -432,7 +443,7 @@
 					}
 					else {
 						_$('#prospect_result_tbody').innerHTML += html;
-						_$('#other_prospects_count_td').innerHTML = others.length + ' recruiter(s) have already recruited this channel';
+						_$('#other_prospects_count_td').innerHTML = others.length + ' recruiter' + (many ? 's'  : '') + ' ' + (many ? 'have'  : 'has') + ' already recruited this channel';
 					}
 				},
 				getProspects = function () {
@@ -445,7 +456,16 @@
 							_$('#prospect_search_input').focus();
 							setProspects(ctx.params.action || 'Lead');
 						});
+				},
+				drawChart = function (data) {
+					graph_data = data || graph_data;
+					new google.visualization.PieChart(_$('#chart_div')).draw(
+						new google.visualization.arrayToDataTable(graph_data), {
+							colors	: ['#e74c3c', '#e67e22', '#f1c40f', '#ecf0f1', '#2ecc71', '#3498db', '#9b59b6'],
+							is3D	: true
+						});
 				};
+
 			getProspects();
 		},
 		setReferrer = function (ctx) {
@@ -531,14 +551,16 @@
 					all : [
 							['/overview', 'Overview', 'home'],
 							['/profile', 'You', 'user'],
-							['/about', 'About', 'info-circle'],
-							['/prospect', 'Prospect', 'users']
+							['/prospect', 'Prospect', 'users'],
+							['/earnings', 'Earnings', 'dollar'],
+							['/about', 'About', 'info-circle']
 						],
 					admin : [
 						['/admin', 'Administrator', 'star']
 					],
 					channel : [
-						['/channels', 'Channels', 'youtube-play']
+						['/channels', 'Channels', 'youtube-play'],
+						['/analytics', 'Analytics', 'signal']
 					]
 				};
 
@@ -554,7 +576,7 @@
 					a.setAttribute('href', e[0]);
 					icon.className = 'fa fa-lg fa-' + e[2];
 					a.appendChild(icon);
-					a.appendChild(doc.createTextNode(e[1]));
+					a.appendChild(doc.createTextNode(' ' + e[1]));
 					li.appendChild(a);
 					dom.appendChild(li);
 				});
@@ -586,6 +608,7 @@
 		},
 
 		start = function () {
+			persistence.store.websql.config(persistence, 'yourdbname', 'A database description', 5 * 1024 * 1024);
 			if (Cookies.get('access_token'))
 				curl.to(api + 'user')
 					.then(function (data) {
@@ -626,6 +649,24 @@
 				l;
 			for (i =- 1, l = nl.length >>> 0; ++i !== l; arr[i] = nl[i]);
 			return arr;
+		},
+		triggerEvent = function (elem, eventName) {
+			var event; // The custom event that will be created
+
+			if (document.createEvent) {
+				event = document.createEvent('HTMLEvents');
+				event.initEvent(eventName, true, true);
+			} else {
+				event = document.createEventObject();
+				event.eventType = eventName;
+			}
+
+			event.eventName = eventName;
+
+			if (document.createEvent)
+				elem.dispatchEvent(event);
+			else
+				elem.fireEvent('on' + event.eventType, event);
 		}
 		;
 
