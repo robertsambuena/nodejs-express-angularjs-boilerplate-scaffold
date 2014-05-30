@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <link rel="shortcut icon" href="/favicon.png" />
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.1.2/nprogress.min.css" />
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
-        <link rel="stylesheet" href="/min.css" />
-        <title>Freedom!</title>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no" />
+		<link rel="shortcut icon" href="/favicon.png" />
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.1.2/nprogress.min.css" />
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="/min.css" />
+		<title>Freedom!</title>
 		<script type="text/javascript" src="//www.google.com/jsapi"></script>
 		<script type="text/javascript">
 			google.load('visualization', '1.0', {packages : ['corechart']});
 		</script>
-    </head>
+	</head>
 
-    <body>
-        <header>
-            <div id="mast_div">
-                <img id="logo_img" href="/" src="/freedom-nav-logo.png" class="wrapper" height="33px" width="115px"/>
-                <div class="wrapper">
-                    <button id="collapse_button" class="collapsed">
-                        <i class="fa fa-bars fa-lg"></i><i class="fa fa-sort-asc"></i>
-                    </button>
-                </div>
-                <div id="profile_nav_div"></div>
-            </div>
-        </header>
+	<body>
+		<header>
+			<div id="mast_div">
+				<img id="logo_img" href="/" src="/freedom-nav-logo.png" class="wrapper" height="33px" width="115px"/>
+				<div class="wrapper">
+					<button id="collapse_button" class="collapsed">
+						<i class="fa fa-bars fa-lg"></i><i class="fa fa-sort-asc"></i>
+					</button>
+				</div>
+				<div id="profile_nav_div"></div>
+			</div>
+		</header>
 
-        <section id="menu_section">
-            <nav>
-                <ul id="menu_ul"></ul>
-            </nav>
-        </section>
+		<section id="menu_section">
+			<nav>
+				<ul id="menu_ul"></ul>
+			</nav>
+		</section>
 
-        <section id="body_section">
-            <div id="content_div_wrapper">
-                <div id="content_div"></div>
-            </div>
-        </section>
+		<section id="body_section">
+			<div id="content_div_wrapper">
+				<div id="content_div"></div>
+			</div>
+		</section>
 
-        <template id="signin_tmpl">
-            <a id="register_a" href="/register">Register</a>
-            <a id="sign_in_a" href="{api}auth/google">Sign in using Google</a>
-        </template>
+		<template id="signin_tmpl">
+			<a id="register_a" href="/register">Register</a>
+			<a id="sign_in_a" href="{api}auth/google">Sign in using Google</a>
+		</template>
 
 		<template id="applicants_tmpl">
 		</template>
@@ -61,129 +61,129 @@
 			<h3>No data from server</h3>
 		</template>
 
-        <template id="registration_tmpl">
-            <form id="registration_form">
-                Email<input type="email" name="email" value="{email}" required="required"/><br />
-                First Name<input type="text" name="fname" value="{fname}" required="required"/><br />
-                Last Name<input type="text" name="lname" value="{lname}" required="required"/><br />
-                Password<input type="text" name="password" required="required"/><br />
-                Confirm Password<input type="text" name="password2" required="required"/><br />
-                Avatar<input type="text" name="avatar" value="{avatar}"/> <br />
-                Birthdate<input type="date" name="birthdate" required="required"/> <br />
-                Skype<input type="text" name="skype" /> <br />
-                Street Address<input type="text" name="street_address" /> <br />
-                City<input type="text" name="city" /> <br />
-                State<input type="text" name="state" /> <br />
-                Country<input type="text" name="country" /> <br />
-                Postal code<input type="text" name="postal_code" /> <br />
-                Facebook<input type="text" name="facebook" /> <br />
-                Twitter<input type="text" name="twitter" /> <br />
-                Phone<input type="text" name="phone" /> <br />
-                <input type="hidden" name="google_refresh_token" value="{google_refresh_token}"/>
-                <input type="hidden" name="referrer" value="{referrer}"/>
-                <input type="submit" name="submit" value="Submit" />
-            </form>
-        </template>
+		<template id="registration_tmpl">
+			<form id="registration_form">
+				Email<input type="email" name="email" value="{email}" required="required"/><br />
+				First Name<input type="text" name="fname" value="{fname}" required="required"/><br />
+				Last Name<input type="text" name="lname" value="{lname}" required="required"/><br />
+				Password<input type="text" name="password" required="required"/><br />
+				Confirm Password<input type="text" name="password2" required="required"/><br />
+				Avatar<input type="text" name="avatar" value="{avatar}"/> <br />
+				Birthdate<input type="date" name="birthdate" required="required"/> <br />
+				Skype<input type="text" name="skype" /> <br />
+				Street Address<input type="text" name="street_address" /> <br />
+				City<input type="text" name="city" /> <br />
+				State<input type="text" name="state" /> <br />
+				Country<input type="text" name="country" /> <br />
+				Postal code<input type="text" name="postal_code" /> <br />
+				Facebook<input type="text" name="facebook" /> <br />
+				Twitter<input type="text" name="twitter" /> <br />
+				Phone<input type="text" name="phone" /> <br />
+				<input type="hidden" name="google_refresh_token" value="{google_refresh_token}"/>
+				<input type="hidden" name="referrer" value="{referrer}"/>
+				<input type="submit" name="submit" value="Submit" />
+			</form>
+		</template>
 
-        <template id="profile_nav_tmpl">
-            <span id="profile_email_span">{email}</span>
-            <i id="bell_icon" class="fa fa-bell-o fa-lg"></i>
-            <img id="profile_avatar_img" title="Logout" src="{avatar}" width="27px" height="27px"/>
-        </template>
+		<template id="profile_nav_tmpl">
+			<span id="profile_email_span">{email}</span>
+			<i id="bell_icon" class="fa fa-bell-o fa-lg"></i>
+			<img id="profile_avatar_img" title="Logout" src="{avatar}" width="27px" height="27px"/>
+		</template>
 
-        <template id="overview_tmpl">
-            This is an overview
-        </template>
+		<template id="overview_tmpl">
+			This is an overview
+		</template>
 
-        <template id="profile_tmpl">
-            <div id="profile_div">
-                <img src="{avatar}" width="128px" height="128px" alt="{name}'s picture"/>
-                <div>
-                    <span id="profile_name_span">{name}</span><br />
-                    Badges : <br />
-                    Class : {class} <br />
-                    <a href="/profile/edit" id="edit_profile_button" class="button">Edit Profile</a>
-                </div>
-                <br class="clearfix"/>
-                <ul>
-                    <li>Info</li>
-                    <li>Class</li>
-                    <li>Recruits</li>
-                <ul>
-            </div>
-        </template>
+		<template id="profile_tmpl">
+			<div id="profile_div">
+				<img src="{avatar}" width="128px" height="128px" alt="{name}'s picture"/>
+				<div>
+					<span id="profile_name_span">{name}</span><br />
+					Badges : <br />
+					Class : {class} <br />
+					<a href="/profile/edit" id="edit_profile_button" class="button">Edit Profile</a>
+				</div>
+				<br class="clearfix"/>
+				<ul>
+					<li>Info</li>
+					<li>Class</li>
+					<li>Recruits</li>
+				<ul>
+			</div>
+		</template>
 
-        <template id="edit_profile_tmpl">
-            <form id="edit_profile_form">
-                First Name<input type="text" name="fname" value="{fname}"/><br />
-                Last Name<input type="text" name="lname" value="{lname}"/><br />
-                Skype<input type="text" name="skype" value="{skype}"/> <br />
-                Street Address<input type="text" name="street_address" value="{street_address}"/> <br />
-                City<input type="text" name="city" value="{city}"/> <br />
-                State<input type="text" name="state" value="{state}"/> <br />
-                Country<input type="text" name="country" value="{country}"/> <br />
-                Postal code<input type="text" name="postal_code" value="{postal_code}"/> <br />
-                Avatar<input type="text" name="avatar" value="{avatar}"/> <br />
-                Facebook<input type="text" name="facebook" value="{facebook}"/> <br />
-                Twitter<input type="text" name="twitter" value="{twitter}"/> <br />
-                Phone<input type="text" name="phone" value="{phone}"/> <br />
-                <input type="submit" name="submit" value="Submit" />
-            </form>
-        </template>
+		<template id="edit_profile_tmpl">
+			<form id="edit_profile_form">
+				First Name<input type="text" name="fname" value="{fname}"/><br />
+				Last Name<input type="text" name="lname" value="{lname}"/><br />
+				Skype<input type="text" name="skype" value="{skype}"/> <br />
+				Street Address<input type="text" name="street_address" value="{street_address}"/> <br />
+				City<input type="text" name="city" value="{city}"/> <br />
+				State<input type="text" name="state" value="{state}"/> <br />
+				Country<input type="text" name="country" value="{country}"/> <br />
+				Postal code<input type="text" name="postal_code" value="{postal_code}"/> <br />
+				Avatar<input type="text" name="avatar" value="{avatar}"/> <br />
+				Facebook<input type="text" name="facebook" value="{facebook}"/> <br />
+				Twitter<input type="text" name="twitter" value="{twitter}"/> <br />
+				Phone<input type="text" name="phone" value="{phone}"/> <br />
+				<input type="submit" name="submit" value="Submit" />
+			</form>
+		</template>
 
-        <template id="choose_tmpl">
-            Choose a class
-            <br /><br /><br />
-            <a href="/choose/partner" class="button">Partner</a>
-            <br /><br /><br />
-            <a href="/choose/staff" class="button">Staff</a>
-        </template>
+		<template id="choose_tmpl">
+			Choose a class
+			<br /><br /><br />
+			<a href="/choose/partner" class="button">Partner</a>
+			<br /><br /><br />
+			<a href="/choose/staff" class="button">Staff</a>
+		</template>
 
-        <template id="partner_contract_tmpl">
-            This is a contract for partners...
-            Lorem ipsum blablabla.
-            <br /><br /><br /><br />
-            <a href="/channels/accept" class="button">I accept</a>
-            <br /><br /><br />
-            <a href="/choose/decline" class="button">Nope</a>
-        </template>
+		<template id="partner_contract_tmpl">
+			This is a contract for partners...
+			Lorem ipsum blablabla.
+			<br /><br /><br /><br />
+			<a href="/channels/accept" class="button">I accept</a>
+			<br /><br /><br />
+			<a href="/choose/decline" class="button">Nope</a>
+		</template>
 
-        <template id="staff_contract_tmpl">
-            This is a contract for staff...
-            Lorem ipsum blablabla.
-            <br /><br /><br /><br />
-            <a href="/staff/accept" class="button">I accept</a>
-            <br /><br /><br />
-            <a href="/choose/decline" class="button">Nope</a>
-        </template>
+		<template id="staff_contract_tmpl">
+			This is a contract for staff...
+			Lorem ipsum blablabla.
+			<br /><br /><br /><br />
+			<a href="/staff/accept" class="button">I accept</a>
+			<br /><br /><br />
+			<a href="/choose/decline" class="button">Nope</a>
+		</template>
 
-        <template id="channels_tmpl">
-            <a href="{api}channel/add" class="button">Add Channel</a>
-            <pre>{data}</pre>
-        </template>
+		<template id="channels_tmpl">
+			<a href="{api}channel/add" class="button">Add Channel</a>
+			<pre>{data}</pre>
+		</template>
 
-        <template id="add_channel_tmpl">
-            Add this channel? :
-            <br />
-            <form id="add_channel_form">
-                <pre>{data}</pre>
-                <select id="network_select" required="required" name="network_id">
-                    <option value="1">Network 1</option>
-                    <option value="2">Network 2</option>
-                    <option value="3">Network 3</option>
-                    <option value="4">Network 4</option>
-                </select>
-                <input type="submit" value="Add" name="submit"/>
-            </form>
-        </template>
+		<template id="add_channel_tmpl">
+			Add this channel? :
+			<br />
+			<form id="add_channel_form">
+				<pre>{data}</pre>
+				<select id="network_select" required="required" name="network_id">
+					<option value="1">Network 1</option>
+					<option value="2">Network 2</option>
+					<option value="3">Network 3</option>
+					<option value="4">Network 4</option>
+				</select>
+				<input type="submit" value="Add" name="submit"/>
+			</form>
+		</template>
 
-        <template id="about_tmpl">
-            Hi im about page, and you are?
-        </template>
+		<template id="about_tmpl">
+			Hi im about page, and you are?
+		</template>
 
-        <template id="not_found_tmpl">
-            Page Not Found :(
-        </template>
+		<template id="not_found_tmpl">
+			Page Not Found :(
+		</template>
 
 		<template id="prospect_tmpl">
 			<div id="refer_link_div">
@@ -296,6 +296,6 @@
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
 		<script type="text/javascript" src="//momentjs.com/downloads/moment.min.js"></script>
 		<script type="text/javascript" src="/min.js"></script>
-    </body>
+	</body>
 
 </html>
