@@ -453,56 +453,35 @@
 				Cookies.set('referrer_email', ctx.params.email);
 			root.location.href = '/';
 		},
+        admin = function(ctx) {
+			var dom = _$('#applicants_tmpl');
+			if(user_info){
+				curl.get(api + 'admin/applicants')
+					.send({
+						size: ctx.params.size || 10,
+						page: ctx.params.page || 1
+					})
+					.then(function (d) {
+						if (d) {
+							for(var i in d){
+								var element = t('unapproved_list', {
+														_id : d[i]._id,
+														channel_name : d[i].channel_name,
+														last30_days : d[i].last30_days
+													});
 
-
-		// sherwin's
-        parseQueryString = function( queryString ) {
-            var params = {}, queries, temp, i, l;
-
-            // Split into key/value pairs
-            queries = queryString.split("&");
-
-            // Convert the array of strings into an object
-            for ( i = 0, l = queries.length; i < l; i++ ) {
-                temp = queries[i].split('=');
-                params[temp[0]] = temp[1];
-            }
-
-            return params;
-        },
-        viewApplicants = function() {
-            var qs = parseQueryString(window.location.search.substring(1)),
-                size = qs.size || 10,
-                page = qs.page || 1;
-
-            if(user_info){
-                curl.post(api + 'admin/identify')
-                    .send()
-                    .then(function (r){
-                        if(r){
-                            if(r.type!=="admin"){
-                                _$('#admin_a').parentNode.innerHTML = "";
-                            }
-                        }
-                    })
-                    .onerror(function (e){
-                        console.log(e);
-                    });
-
-                curl.get(api+'admin/partners')
-                    .send({page: page, size : size})
-                    .then(function(d){
-                        console.log(d);
-                    })
-                    .onerror(function(e){
-
-                    });
-
-                content_div.innerHTML = t('admin');
-
+								dom.innerHTML += element;
+							}
+							dom.innerHTML += '</tbody></table>';
+							content_div.innerHTML = dom.innerHTML;
+						} else
+							content_div.innerHTML = t('empty');
+					})
+					.onerror(function (e) {
+						console.log(e);
+					});
             } else
                 logout();
-
         },
 
 
@@ -647,7 +626,7 @@
 	page('/channels/:action?', channels);
 	page('/error', error);
 	page('/prospect/:action?', prospect);
-    page('/admin/:action?', viewApplicants);
+    page('/admin/:page?/:size?', admin);
     page('/via/:email?', setReferrer);
 	page('*', notFound);
 
