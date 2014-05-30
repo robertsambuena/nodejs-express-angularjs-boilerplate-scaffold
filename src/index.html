@@ -40,12 +40,12 @@
             </div>
         </section>
 
-        <template id="signin_tmpl">
+        <script type="text/html" id="signin_tmpl">
             <a id="register_a" href="/register">Register</a>
             <a id="sign_in_a" href="{api}auth/google">Sign in using Google</a>
-        </template>
+        </script>
 
-        <template id="admin_tmpl">
+        <script type="text/html" id="admin_tmpl">
             <table id="unapproved">
                 <thead>
                     <tr>
@@ -56,9 +56,9 @@
                     </tr>
                 </thead>
             </table>
-        </template>
+        </script>
 
-        <template id="registration_tmpl">
+        <script type="text/html" id="registration_tmpl">
             <form id="registration_form">
                 Email<input type="email" name="email" value="{email}" required="required"/><br />
                 First Name<input type="text" name="fname" value="{fname}" required="required"/><br />
@@ -80,19 +80,19 @@
                 <input type="hidden" name="referrer" value="{referrer}"/>
                 <input type="submit" name="submit" value="Submit" />
             </form>
-        </template>
+        </script>
 
-        <template id="profile_nav_tmpl">
+        <script type="text/html" id="profile_nav_tmpl">
             <span id="profile_email_span">{email}</span>
             <i id="bell_icon" class="fa fa-bell-o fa-lg"></i>
             <img id="profile_avatar_img" title="Logout" src="{avatar}" width="27px" height="27px"/>
-        </template>
+        </script>
 
-        <template id="overview_tmpl">
+        <script type="text/html" id="overview_tmpl">
             This is an overview
-        </template>
+        </script>
 
-        <template id="profile_tmpl">
+        <script type="text/html" id="profile_tmpl">
             <div id="profile_div">
                 <img src="{avatar}" width="128px" height="128px" alt="{name}'s picture"/>
                 <div>
@@ -108,9 +108,9 @@
                     <li>Recruits</li>
                 <ul>
             </div>
-        </template>
+        </script>
 
-        <template id="edit_profile_tmpl">
+        <script type="text/html" id="edit_profile_tmpl">
             <form id="edit_profile_form">
                 First Name<input type="text" name="fname" value="{fname}"/><br />
                 Last Name<input type="text" name="lname" value="{lname}"/><br />
@@ -126,40 +126,40 @@
                 Phone<input type="text" name="phone" value="{phone}"/> <br />
                 <input type="submit" name="submit" value="Submit" />
             </form>
-        </template>
+        </script>
 
-        <template id="choose_tmpl">
+        <script type="text/html" id="choose_tmpl">
             Choose a class
             <br /><br /><br />
             <a href="/choose/partner" class="button">Partner</a>
             <br /><br /><br />
             <a href="/choose/staff" class="button">Staff</a>
-        </template>
+        </script>
 
-        <template id="partner_contract_tmpl">
+        <script type="text/html" id="partner_contract_tmpl">
             This is a contract for partners...
             Lorem ipsum blablabla.
             <br /><br /><br /><br />
             <a href="/channels/accept" class="button">I accept</a>
             <br /><br /><br />
             <a href="/choose/decline" class="button">Nope</a>
-        </template>
+        </script>
 
-        <template id="staff_contract_tmpl">
+        <script type="text/html" id="staff_contract_tmpl">
             This is a contract for staff...
             Lorem ipsum blablabla.
             <br /><br /><br /><br />
             <a href="/staff/accept" class="button">I accept</a>
             <br /><br /><br />
             <a href="/choose/decline" class="button">Nope</a>
-        </template>
+        </script>
 
-        <template id="channels_tmpl">
+        <script type="text/html" id="channels_tmpl">
             <a href="{api}channel/add" class="button">Add Channel</a>
             <pre>{data}</pre>
-        </template>
+        </script>
 
-        <template id="add_channel_tmpl">
+        <script type="text/html" id="add_channel_tmpl">
             Add this channel? :
             <br />
             <form id="add_channel_form">
@@ -172,17 +172,17 @@
                 </select>
                 <input type="submit" value="Add" name="submit"/>
             </form>
-        </template>
+        </script>
 
-        <template id="about_tmpl">
+        <script type="text/html" id="about_tmpl">
             Hi im about page, and you are?
-        </template>
+        </script>
 
-        <template id="not_found_tmpl">
+        <script type="text/html" id="not_found_tmpl">
             Page Not Found :(
-        </template>
+        </script>
 
-		<template id="prospect_tmpl">
+		<script type="text/html" id="prospect_tmpl">
 			<div id="refer_link_div">
 				Your refer-a-friend link : <br /><span>{link}</span>
 			</div>
@@ -220,9 +220,9 @@
 				<tbody id="prospect_table_tbody"></tbody>
 			</table>
 			<div id="chart_div"></div>
-		</template>
+		</script>
 
-		<template id="prospect_result_tr_tmpl">
+		<script type="text/html" id="prospect_result_tr_tmpl">
 			<tr id="prospect_{_id}_tr">
 				<td><input type="checkbox" value="{_id}"/></td>
 				<td><img src="{thumbnail}" width="88px" height="88px"/></td>
@@ -244,9 +244,9 @@
 					<span class="prospect_time_updated_span">Updated last {updated_at}</span>
 				</td>
 			</tr>
-		</template>
+		</script>
 
-		<template id="prospect_result_tmpl">
+		<script type="text/html" id="prospect_result_tmpl">
 			<table id="prospect_result_table">
 				<tbody id="prospect_result_tbody">
 					<tr>
@@ -275,9 +275,9 @@
 					</tr>
 				</tbody>
 			</table>
-		</template>
+		</script>
 
-		<template id="others_prospect_tmpl">
+		<script type="text/html" id="others_prospect_tmpl">
 			<tr class="others_prospect_tr">
 				<td colspan="2">{recruiter_email}</td>
 				<td>{created_at}</td>
@@ -288,7 +288,7 @@
 					<span class="prospect_time_updated_span">-- Updated last {updated_at}</span>
 				</td>
 			</tr>
-		</template>
+		</script>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
 		<script type="text/javascript" src="//momentjs.com/downloads/moment.min.js"></script>
