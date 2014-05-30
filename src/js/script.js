@@ -454,7 +454,21 @@
 			root.location.href = '/';
 		},
         admin = function(ctx) {
-			var dom = _$('#applicants_tmpl');
+			var dom = _$('#applicants_tmpl'),
+				rows = '';
+
+			dom.innerHTML = '<table id="unapproved_table">'+
+							'<thead>' +
+							'	<tr>' +
+							'		<td>Link</td>' +
+							'		<td>Channel</td>' +
+							'		<td>Last 30 Days</td>' +
+							'		<td>View</td>' +
+							'	</tr>' +
+							'</thead>' +
+							'<tbody id="unapproved_partners">'+
+							'</tbody></table>';
+
 			if(user_info){
 				curl.get(api + 'admin/applicants')
 					.send({
@@ -469,11 +483,11 @@
 														channel_name : d[i].channel_name,
 														last30_days : d[i].last30_days
 													});
-
-								dom.innerHTML += element;
+								rows += element;
 							}
-							dom.innerHTML += '</tbody></table>';
+
 							content_div.innerHTML = dom.innerHTML;
+							document.getElementById('unapproved_partners').innerHTML = rows;
 						} else
 							content_div.innerHTML = t('empty');
 					})
