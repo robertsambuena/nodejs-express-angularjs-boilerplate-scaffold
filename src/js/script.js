@@ -11,7 +11,14 @@
 			var p;
 			s = _$('#' + s + '_tmpl').innerHTML;
 			for (p in d)
-				s = s.replace(new RegExp('{' + p + '}', 'g'), d[p]);
+				s = s.replace(new RegExp('{' + p + '}', 'g'), ('' + d[p])
+					.match(/\S{1,30}/g)
+					.join(' ')
+					.replace(/&/gi, '&amp;')
+					.replace(/</gi, '&lt;')
+					.replace(/\"/gi, '&quot;')
+					.replace(/\'/gi, '&#039;')
+					.replace(/>/gi, '&gt;'));
 			return s;
 		},
 
@@ -324,7 +331,7 @@
 									if (self) {
 										button.disabled = true;
 										button.className = 'disabled';
-										button.innerHTML = 'Recruited';
+										button.innerHTML = 'Added';
 									}
 									bindRecruitButton();
 								} else {
@@ -396,6 +403,7 @@
 
 					while (i--) {
 						temp[i].note = (temp[i].note || '');
+						temp[i].updated_at = moment(temp[i].updated_at || temp[i].created_at).format('MMM D, YYYY hh:mm A');
 						html += t('prospect_result_tr', temp[i]);
 					}
 
@@ -433,8 +441,9 @@
 						i = others.length,
 						many = (i > 1);
 					while (i--) {
-						others[i].created_at = new Date(others[i].created_at).toDateString();
+						others[i].created_at = moment(others[i].created_at).format('MMM D, YYYY hh:mm A');
 						others[i].note = others[i].note || 'N/A';
+						others[i].updated_at = moment(others[i].updated_at || others[i].created_at).format('MMM D, YYYY hh:mm A');
 						html += t('others_prospect', others[i]);
 					}
 					if (others.length === 0) {
@@ -608,7 +617,6 @@
 		},
 
 		start = function () {
-			persistence.store.websql.config(persistence, 'yourdbname', 'A database description', 5 * 1024 * 1024);
 			if (Cookies.get('access_token'))
 				curl.to(api + 'user')
 					.then(function (data) {
@@ -620,6 +628,7 @@
 					})
 					.onerror(logout)
 					.finally(function () {
+						persistence.store.websql.config(persistence, 'freedom', 'Cache', 5 * 1024 * 1024);	//5mb
 						setProfileNav();
 						setMenu();
 					});

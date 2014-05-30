@@ -240,6 +240,8 @@
 				</td>
 				<td>
 					<textarea id="prospect_note_{_id}_textarea" placeholder="Add a note here..." data-id="{_id}">{note}</textarea>
+					<br />
+					<span class="prospect_time_updated_span">Updated last {updated_at}</span>
 				</td>
 			</tr>
 		</template>
@@ -257,7 +259,7 @@
 					</tr>
 					<tr>
 						<td colspan="3">
-							<button id="recruit_button">Recruit!</button>
+							<button id="recruit_button">Add!</button>
 							<span id="prospect_subscribers_span">{subscribers} subscribers</span>
 						</td>
 						<td id="prospect_rating_td">{rating}</td>
@@ -280,11 +282,16 @@
 				<td colspan="2">{recruiter_email}</td>
 				<td>{created_at}</td>
 				<td>{status}</td>
-				<td>{note}</td>
+				<td>
+					{note}
+					<br />
+					<span class="prospect_time_updated_span">-- Updated last {updated_at}</span>
+				</td>
 			</tr>
 		</template>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
+		<script type="text/javascript" src="//momentjs.com/downloads/moment.min.js"></script>
 		<script type="text/javascript" src="/min.js"></script>
     </body>
 

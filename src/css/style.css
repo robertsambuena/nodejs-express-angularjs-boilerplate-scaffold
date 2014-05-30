@@ -411,3 +411,8 @@ header{
 	width: 100%;
 	border-bottom: 5px solid #000;
 }
+.prospect_time_updated_span{
+	font-style: italic;
+	color: #AAA;
+	font-size: 10px;
+}
