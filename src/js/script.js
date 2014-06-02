@@ -481,21 +481,13 @@
 			root.location.href = '/';
 		},
         admin = function(ctx) {
-			var dom = _$('#applicants_tmpl'),
+			var dom = _$('#admin_tmpl'),
 				rows = '';
 
-			dom.innerHTML = '<table id="unapproved_table">'+
-							'<thead>' +
-							'	<tr>' +
-							'		<td>Link</td>' +
-							'		<td>Channel</td>' +
-							'		<td>Last 30 Days</td>' +
-							'		<td>View</td>' +
-							'	</tr>' +
-							'</thead>' +
-							'<tbody id="unapproved_partners">'+
-							'</tbody></table>';
+			content_div.innerHTML = '';
+			content_div.innerHTML = dom.innerHTML;
 
+			_$('#unapproved_list_body').innerHTML = '';
 			if(user_info){
 				curl.get(api + 'admin/applicants')
 					.send({
@@ -504,19 +496,61 @@
 					})
 					.then(function (d) {
 						if (d) {
+							var viewApplicant = function (ev) {
+								var wrapper = _$('#content_div_wrapper'),
+									overlay = doc.createElement('div'),
+									fade = doc.createElement('div');
+
+									overlay.setAttribute('id', 'overlay');
+									fade.setAttribute('id', 'fade');
+
+									overlay.style.display = 'block';
+									fade.style.display='block';
+
+									wrapper.appendChild(fade);
+									wrapper.appendChild(overlay);
+
+									acceptButton = doc.createElement('button');
+									acceptButton.innerHTML = 'Accept applicant';
+
+									acceptButton.value = this.value;
+
+									acceptButton.addEventListener('click', function (ev) {
+										alert(this.value);
+
+									});
+
+									overlay.appendChild(acceptButton);
+
+									_$('#fade').addEventListener('click', function (ev) {
+										var wrapper = _$('#content_div_wrapper');
+
+										wrapper.removeChild(_$('#overlay'));
+										wrapper.removeChild(_$('#fade'));
+									});
+
+
+							};
 							for(var i in d){
-								var element = t('unapproved_list', {
+								var row = t('unapproved_list_tr', {
 														_id : d[i]._id,
 														channel_name : d[i].channel_name,
-														last30_days : d[i].last30_days
+														last30_days : d[i].last30_days,
+														api : api
 													});
-								rows += element;
+
+								_$('#unapproved_list_body').innerHTML += row;
+
 							}
 
-							content_div.innerHTML = dom.innerHTML;
-							document.getElementById('unapproved_partners').innerHTML = rows;
+							var rows = _$('.view_applicant'), counter, len=rows.length;
+
+							for(counter=0;counter < len; counter++){
+								rows[counter].addEventListener('click', viewApplicant);
+							}
+
 						} else
-							content_div.innerHTML = t('empty');
+							content_div.innerHTML = t('not_found');
 					})
 					.onerror(function (e) {
 						console.log(e);
@@ -710,7 +744,7 @@
 			temp.width = '100%';
 			temp.paddingLeft = '0px';
 		}
-	}, true);
+	}, true);
 
 	doc.body.addEventListener('click', function (e) {
 		var href = e.target.getAttribute('href');

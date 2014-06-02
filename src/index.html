@@ -55,8 +55,23 @@
                         <td>View</td>
                     </tr>
                 </thead>
+				<tbody id="unapproved_list_body">
+
+				</tbody>
             </table>
         </script>
+
+		<script type="text/html" id="unapproved_list_tr_tmpl">
+			<tr>
+				<td>
+					<a href="http://www.youtube.com/channel/{_id}" target="_blank"><i class="fa fa-youtube fa-2x"></i></a>
+				</td>
+				<td>{channel_name}</td>
+				<td>{last30_days}</td>
+				<td><button value="{_id}" class="view_applicant">View</button></td>
+			</tr>
+		</script>
+
         <script type="text/html" id="registration_tmpl">
             <form id="registration_form">
                 Email<input type="email" name="email" value="{email}" required="required"/><br />
