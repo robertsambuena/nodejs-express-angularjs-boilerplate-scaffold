@@ -10,15 +10,17 @@
 		t = function (s, d) {
 			var p;
 			s = _$('#' + s + '_tmpl').innerHTML;
-			for (p in d)
-				s = s.replace(new RegExp('{' + p + '}', 'g'), ('' + d[p])
-					.match(/\S{1,30}/g)
-					.join(' ')
+			for (p in d) {
+				d[p] = '' + d[p];
+				if (!~d[p].indexOf('http'))
+					d[p] = d[p].match(/\S{1,30}/g).join(' ');
+				s = s.replace(new RegExp('{' + p + '}', 'g'), d[p]
 					.replace(/&/gi, '&amp;')
 					.replace(/</gi, '&lt;')
 					.replace(/\"/gi, '&quot;')
 					.replace(/\'/gi, '&#039;')
 					.replace(/>/gi, '&gt;'));
+			}
 			return s;
 		},
 
@@ -165,7 +167,6 @@
 					case 'add':
 						if (Cookies.get('channels')) {
 							data = JSON.parse(Cookies.get('channels'));
-							Cookies.expire('channels');
 							content_div.innerHTML = t('add_channel', {data : JSON.stringify(data, null, 4)});
 							_$('#add_channel_form').addEventListener('submit', function (e) {
 								e.preventDefault();
@@ -285,9 +286,6 @@
 							.send({
 								id : e.target.getAttribute('data-id'),
 								note : e.target.value || ' '
-							})
-							.then(function (data) {
-								console.log(data);
 							})
 							.onerror(function (err) {
 								console.dir(err);
@@ -621,7 +619,7 @@
 					})
 					.onerror(logout)
 					.finally(function () {
-						persistence.store.websql.config(persistence, 'freedom', 'Cache', 5 * 1024 * 1024);	//5mb
+						//persistence.store.websql.config(persistence, 'freedom', 'Cache', 5 * 1024 * 1024);	//5mb
 						setProfileNav();
 						setMenu();
 					});
