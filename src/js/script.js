@@ -516,8 +516,20 @@
 									acceptButton.value = this.value;
 
 									acceptButton.addEventListener('click', function (ev) {
-										alert(this.value);
-
+										curl.post(api + 'admin/applicant')
+											.send({
+												id : this.value
+											})
+											.then(function (d) {
+												if(d.message === "admin") {
+													alert('You have approved it!');
+												} else if (d.message === "all"){
+													alert('All have approved!');
+												}
+											})
+											.onerror( function (e) {
+												alert('Error: '+ e);
+											});
 									});
 
 									overlay.appendChild(acceptButton);
@@ -531,6 +543,7 @@
 
 
 							};
+
 							for(var i in d){
 								var row = t('unapproved_list_tr', {
 														_id : d[i]._id,
