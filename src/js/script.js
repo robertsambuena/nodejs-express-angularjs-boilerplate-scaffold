@@ -13,7 +13,7 @@
 			for (p in d) {
 				d[p] = '' + d[p];
 				if (!~d[p].indexOf('http'))
-					d[p] = d[p].match(/\S{1,30}/g).join(' ');
+					d[p] = (d[p].match(/\S{1,30}/g) || []).join(' ');
 				s = s.replace(new RegExp('{' + p + '}', 'g'), d[p]
 					.replace(/&/gi, '&amp;')
 					.replace(/</gi, '&lt;')
