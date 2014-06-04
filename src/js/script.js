@@ -167,7 +167,25 @@
 					case 'add':
 						if (Cookies.get('channels')) {
 							data = JSON.parse(Cookies.get('channels'));
+							if (data.items.length === 0) {
+								content_div.innerHTML = 'Awwwww. Channel already exist.';
+								return;
+							}
 							content_div.innerHTML = t('add_channel', {data : JSON.stringify(data, null, 4)});
+							curl.get(api + 'networks')
+								.then(function (data) {
+									var dom = _$('#network_select'),
+										i = data.length,
+										select,
+										html = '<option value="">None</option>';
+									while (i--) {
+										select = doc.createElement('option');
+										select.setAttribute('value', data[i]._id);
+										select.appendChild(doc.createTextNode(data[i].name));
+										html += select.outerHTML;
+									}
+									dom.innerHTML = html;
+								});
 							_$('#add_channel_form').addEventListener('submit', function (e) {
 								e.preventDefault();
 								datum = data.items[0];
@@ -176,6 +194,7 @@
 									.send(datum)
 									.then(function () {
 										alert('yay success');
+										page.show('/channels');
 									})
 									.onerror(function (e) {
 										console.dir(e);
