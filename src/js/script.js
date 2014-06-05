@@ -504,8 +504,7 @@
 				viewApplicant = function (ev) {
 					var wrapper = _$('#content_div_wrapper'),
 						overlay = doc.createElement('div'),
-						fade = doc.createElement('div'),
-						row;
+						fade = doc.createElement('div');
 
 						overlay.setAttribute('id', 'overlay');
 						fade.setAttribute('id', 'fade');
@@ -563,7 +562,8 @@
 					.then(function (d) {
 						var counter,
 							len,
-							rows;
+							rows,
+							row;
 
 						if (d) {
 							for (counter in d){
