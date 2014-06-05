@@ -499,85 +499,88 @@
 				Cookies.set('referrer_email', ctx.params.email);
 			root.location.href = '/';
 		},
-        admin = function(ctx) {
+        admin = function (ctx) {
 			var dom = _$('#admin_tmpl'),
-				rows = '';
+				viewApplicant = function (ev) {
+					var wrapper = _$('#content_div_wrapper'),
+						overlay = doc.createElement('div'),
+						fade = doc.createElement('div'),
+						row;
+
+						overlay.setAttribute('id', 'overlay');
+						fade.setAttribute('id', 'fade');
+
+						overlay.style.display = 'block';
+						fade.style.display='block';
+
+						wrapper.appendChild(fade);
+						wrapper.appendChild(overlay);
+
+						acceptButton = doc.createElement('button');
+						acceptButton.innerHTML = 'Accept applicant';
+						acceptButton.value = this.value;
+
+						acceptButton.addEventListener('click', function (ev) {
+							curl.post(api + 'admin/applicant')
+								.send({
+									id : this.value
+								})
+								.then(function (d) {
+									if(d.message === "admin") {
+										alert('You have approved it!');
+									} else if (d.message === "all"){
+										alert('All have approved!');
+									}
+								})
+								.onerror(function (e) {
+									alert('Error: ' + e);
+								});
+						}, true);
+
+						overlay.appendChild(acceptButton);
+
+						_$('#fade').addEventListener('click', function (ev) {
+							var wrapper = _$('#content_div_wrapper');
+
+							wrapper.removeChild(_$('#overlay'));
+							wrapper.removeChild(_$('#fade'));
+						});
+
+
+				};
 
 			content_div.innerHTML = '';
 			content_div.innerHTML = dom.innerHTML;
 
 			_$('#unapproved_list_body').innerHTML = '';
-			if(user_info){
+
+			if (user_info) {
 				curl.get(api + 'admin/applicants')
 					.send({
 						size: ctx.params.size || 10,
 						page: ctx.params.page || 1
 					})
 					.then(function (d) {
+						var counter,
+							len,
+							rows;
+
 						if (d) {
-							var viewApplicant = function (ev) {
-								var wrapper = _$('#content_div_wrapper'),
-									overlay = doc.createElement('div'),
-									fade = doc.createElement('div');
-
-									overlay.setAttribute('id', 'overlay');
-									fade.setAttribute('id', 'fade');
-
-									overlay.style.display = 'block';
-									fade.style.display='block';
-
-									wrapper.appendChild(fade);
-									wrapper.appendChild(overlay);
-
-									acceptButton = doc.createElement('button');
-									acceptButton.innerHTML = 'Accept applicant';
-
-									acceptButton.value = this.value;
-
-									acceptButton.addEventListener('click', function (ev) {
-										curl.post(api + 'admin/applicant')
-											.send({
-												id : this.value
-											})
-											.then(function (d) {
-												if(d.message === "admin") {
-													alert('You have approved it!');
-												} else if (d.message === "all"){
-													alert('All have approved!');
-												}
-											})
-											.onerror( function (e) {
-												alert('Error: '+ e);
-											});
-									});
-
-									overlay.appendChild(acceptButton);
-
-									_$('#fade').addEventListener('click', function (ev) {
-										var wrapper = _$('#content_div_wrapper');
-
-										wrapper.removeChild(_$('#overlay'));
-										wrapper.removeChild(_$('#fade'));
-									});
-
-
-							};
-
-							for(var i in d){
-								var row = t('unapproved_list_tr', {
-														_id : d[i]._id,
-														channel_name : d[i].channel_name,
-														last30_days : d[i].last30_days,
+							for (counter in d){
+								row = t('unapproved_list_tr', {
+														_id : d[counter]._id,
+														channel_name : d[counter].channel_name,
+														last30_days : d[counter].last30_days,
 														api : api
 													});
 
 								_$('#unapproved_list_body').innerHTML += row;
-
 							}
 
-							var rows = _$('.view_applicant'), counter, len=rows.length;
+							rows = _$('.view_applicant');
+							len = rows.length;
 
-							for(counter=0;counter < len; counter++){
+							for (counter = 0; counter < len; counter++){
 								rows[counter].addEventListener('click', viewApplicant);
 							}
 
