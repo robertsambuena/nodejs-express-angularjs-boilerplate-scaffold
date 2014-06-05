@@ -525,9 +525,9 @@
 									id : this.value
 								})
 								.then(function (d) {
-									if(d.message === "admin") {
+									if (d.message === "admin") {
 										alert('You have approved it!');
-									} else if (d.message === "all"){
+									} else if (d.message === "all") {
 										alert('All have approved!');
 									}
 								})
@@ -548,7 +548,6 @@
 
 				};
 
-			content_div.innerHTML = '';
 			content_div.innerHTML = dom.innerHTML;
 
 			_$('#unapproved_list_body').innerHTML = '';
@@ -566,7 +565,7 @@
 							row;
 
 						if (d) {
-							for (counter in d){
+							for (counter in d) {
 								row = t('unapproved_list_tr', {
 														_id : d[counter]._id,
 														channel_name : d[counter].channel_name,
@@ -580,7 +579,7 @@
 							rows = _$('.view_applicant');
 							len = rows.length;
 
-							for (counter = 0; counter < len; counter++){
+							for (counter = 0; counter < len; counter++) {
 								rows[counter].addEventListener('click', viewApplicant);
 							}
 
