@@ -627,6 +627,9 @@
 					channel : [
 						['/channels', 'Channels', 'youtube-play'],
 						['/analytics', 'Analytics', 'signal']
+					],
+					network : [
+						['/network', 'Network', 'sitemap' ]
 					]
 				};
 
@@ -776,7 +779,8 @@
 			temp.width = '100%';
 			temp.paddingLeft = '0px';
 		}
-	}, true);
+	}, true);
+
 
 	doc.body.addEventListener('click', function (e) {
 		var href = e.target.getAttribute('href');
