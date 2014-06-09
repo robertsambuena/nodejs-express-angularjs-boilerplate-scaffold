@@ -503,14 +503,13 @@
 			var dom = _$('#admin_tmpl'),
 				viewApplicant = function (ev) {
 					var wrapper = _$('#content_div_wrapper'),
-						overlay = doc.createElement('div'),
+						overlay = doc.createElement('div').,
 						fade = doc.createElement('div');
 
 						overlay.setAttribute('id', 'overlay');
 						fade.setAttribute('id', 'fade');
 
-						overlay.style.display = 'block';
-						fade.style.display='block';
+						overlay.style.display = fade.style.display = 'block';
 
 						wrapper.appendChild(fade);
 						wrapper.appendChild(overlay);
@@ -521,9 +520,7 @@
 
 						acceptButton.addEventListener('click', function (ev) {
 							curl.post(api + 'admin/applicant')
-								.send({
-									id : this.value
-								})
+								.send({ id : this.value })
 								.then(function (d) {
 									if (d.message === "admin") {
 										alert('You have approved it!');
@@ -579,7 +576,7 @@
 							rows = _$('.view_applicant');
 							len = rows.length;
 
-							for (counter = 0; counter < len; counter++) {
+							for (--len) {
 								rows[counter].addEventListener('click', viewApplicant);
 							}
 
