@@ -499,56 +499,95 @@
 				Cookies.set('referrer_email', ctx.params.email);
 			root.location.href = '/';
 		},
+        admin = function (ctx) {
+			var dom = _$('#admin_tmpl'),
+				viewApplicant = function (ev) {
+					var wrapper = _$('#content_div_wrapper'),
+						overlay = doc.createElement('div').,
+						fade = doc.createElement('div');
+
+						overlay.setAttribute('id', 'overlay');
+						fade.setAttribute('id', 'fade');
+
+						overlay.style.display = fade.style.display = 'block';
+
+						wrapper.appendChild(fade);
+						wrapper.appendChild(overlay);
+
+						acceptButton = doc.createElement('button');
+						acceptButton.innerHTML = 'Accept applicant';
+						acceptButton.value = this.value;
+
+						acceptButton.addEventListener('click', function (ev) {
+							curl.post(api + 'admin/applicant')
+								.send({ id : this.value })
+								.then(function (d) {
+									if (d.message === "admin") {
+										alert('You have approved it!');
+									} else if (d.message === "all") {
+										alert('All have approved!');
+									}
+								})
+								.onerror(function (e) {
+									alert('Error: ' + e);
+								});
+						}, true);
+
+						overlay.appendChild(acceptButton);
+
+						_$('#fade').addEventListener('click', function (ev) {
+							var wrapper = _$('#content_div_wrapper');
+
+							wrapper.removeChild(_$('#overlay'));
+							wrapper.removeChild(_$('#fade'));
+						});
 
 
-		// sherwin's
-        parseQueryString = function( queryString ) {
-            var params = {}, queries, temp, i, l;
+				};
 
-            // Split into key/value pairs
-            queries = queryString.split("&");
+			content_div.innerHTML = dom.innerHTML;
 
-            // Convert the array of strings into an object
-            for ( i = 0, l = queries.length; i < l; i++ ) {
-                temp = queries[i].split('=');
-                params[temp[0]] = temp[1];
-            }
+			_$('#unapproved_list_body').innerHTML = '';
 
-            return params;
-        },
-        viewApplicants = function() {
-            var qs = parseQueryString(window.location.search.substring(1)),
-                size = qs.size || 10,
-                page = qs.page || 1;
+			if (user_info) {
+				curl.get(api + 'admin/applicants')
+					.send({
+						size: ctx.params.size || 10,
+						page: ctx.params.page || 1
+					})
+					.then(function (d) {
+						var counter,
+							len,
+							rows,
+							row;
 
-            if(user_info){
-                curl.post(api + 'admin/identify')
-                    .send()
-                    .then(function (r){
-                        if(r){
-                            if(r.type!=="admin"){
-                                _$('#admin_a').parentNode.innerHTML = "";
-                            }
-                        }
-                    })
-                    .onerror(function (e){
-                        console.log(e);
-                    });
+						if (d) {
+							for (counter in d) {
+								row = t('unapproved_list_tr', {
+														_id : d[counter]._id,
+														channel_name : d[counter].channel_name,
+														last30_days : d[counter].last30_days,
+														api : api
+													});
 
-                curl.get(api+'admin/partners')
-                    .send({page: page, size : size})
-                    .then(function(d){
-                        console.log(d);
-                    })
-                    .onerror(function(e){
+								_$('#unapproved_list_body').innerHTML += row;
+							}
 
-                    });
+							rows = _$('.view_applicant');
+							len = rows.length;
 
-                content_div.innerHTML = t('admin');
+							for (--len) {
+								rows[counter].addEventListener('click', viewApplicant);
+							}
 
+						} else
+							content_div.innerHTML = t('not_found');
+					})
+					.onerror(function (e) {
+						console.log(e);
+					});
             } else
                 logout();
-
         },
 
 
@@ -587,6 +626,9 @@
 					channel : [
 						['/channels', 'Channels', 'youtube-play'],
 						['/analytics', 'Analytics', 'signal']
+					],
+					network : [
+						['/network', 'Network', 'sitemap' ]
 					]
 				};
 
@@ -714,7 +756,7 @@
 	page('/channels/:action?', channels);
 	page('/error', error);
 	page('/prospect/:action?', prospect);
-    page('/admin/:action?', viewApplicants);
+    page('/admin/:page?/:size?', admin);
     page('/via/:email?', setReferrer);
 	page('*', notFound);
 
@@ -737,6 +779,7 @@
 			temp.paddingLeft = '0px';
 		}
 	}, true);
+
 
 	doc.body.addEventListener('click', function (e) {
 		var href = e.target.getAttribute('href');
