@@ -576,7 +576,7 @@
 							rows = _$('.view_applicant');
 							len = rows.length;
 
-							for (--len) {
+							while (--len) {
 								rows[counter].addEventListener('click', viewApplicant);
 							}
 
