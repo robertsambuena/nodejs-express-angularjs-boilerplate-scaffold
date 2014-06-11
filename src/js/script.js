@@ -503,7 +503,7 @@
 			var dom = _$('#admin_tmpl'),
 				viewApplicant = function (ev) {
 					var wrapper = _$('#content_div_wrapper'),
-						overlay = doc.createElement('div').,
+						overlay = doc.createElement('div'),
 						fade = doc.createElement('div');
 
 						overlay.setAttribute('id', 'overlay');
