@@ -46,6 +46,17 @@
         </script>
 
         <script type="text/html" id="admin_tmpl">
+
+			<div class="gplus">
+				<ul>
+					<li><a href="/admin/channel" id="channel_a">Channel Applications</a></li>
+					<li><a href="/admin/network" id="network_a">Network Applications</a></li>
+				</ul>
+			</div>
+			<div id="admin_content_div"></div>
+        </script>
+
+        <script type="text/html" id="admin_channel_tmpl">
             <table id="unapproved">
                 <thead>
                     <tr>
@@ -59,6 +70,35 @@
             </table>
         </script>
 
+        <script type="text/html" id="admin_network_tmpl">
+            <table id="unapproved">
+                <thead>
+                    <tr>
+                        <td>Email</td>
+                        <td>Date Applied</td>
+                        <td>Download</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+				<tbody id="unapproved_list_body"></tbody>
+            </table>
+        </script>
+
+		<script type="text/html" id="proposal_list_tr_tmpl">
+			<tr>
+				<td>{email}</td>
+				<td>{submitted}</td>
+				<td><a class="button" href="{download}" target="_blank">Download</a></td>
+				<td>
+					<select id="approve_{id}">
+						<option value="Pending">Pending</option>
+						<option value="Rejected">Rejected</option>
+						<option value="Approved">Approved</option>
+					</select>
+				</td>
+			</tr>
+		</script>
+		
 		<script type="text/html" id="unapproved_list_tr_tmpl">
 			<tr>
 				<td>
@@ -200,8 +240,8 @@
 			</form>
 			<div id="prospect_result_div"></div>
 			<hr />
-			<div id="prospects_ul_wrapper">
-				<ul id="prospects_ul">
+			<div class="gplus blood">
+				<ul>
 					<li><a href="/prospect/Lead" id="leads_a">Leads</a></li>
 					<li><a href="/prospect/Contacted" id="contacted_a">Contacted</a></li>
 					<li><a href="/prospect/Pitched" id="pitched_a">Pitched</a></li>
@@ -296,6 +336,14 @@
 					<span class="prospect_time_updated_span">-- Updated last {updated_at}</span>
 				</td>
 			</tr>
+		</script>
+
+		<script type="text/html" id="network_apply_tmpl">
+			Good day young lad! You were summoned here from the inner depths of middle earth to hand over your network application.
+			<form id="network_apply_form">
+				<input type="file" name="file" required/> <br />
+				<input type="submit" value="Hand Over"/>
+			</form>
 		</script>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
