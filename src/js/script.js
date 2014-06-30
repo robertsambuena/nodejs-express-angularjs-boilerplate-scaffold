@@ -582,7 +582,20 @@
 				bindRowEvents = function (id) {
 					var elem = _$(id);
 					elem.addEventListener('change', function (e) {
-						console.dir(e);
+						var elem = e.target,
+							id = elem.id.substring(4) + elem.getAttribute('data-id').substring(4);
+						console.log(id);
+						curl.put(api + 'proposal/' + id)
+							.send({status : elem.value})
+							.then(function (d) {
+								var temp = elem.parentNode.parentNode;
+								alert('Proposal successfully updated');
+								temp.parentNode.removeChild(temp);
+							})
+							.onerror(function (e) {
+								console.dir(e);
+								alert(e.message || e);
+							});
 					});
 				};
 
@@ -644,12 +657,13 @@
 						dom.innerHTML = '';
 						d.forEach(function (a) {
 							dom.innerHTML += t('proposal_list_tr', {
-												id : a._id,
+												id : a._id.substring(0, 16),
+												id2 : a._id.substring(16),
 												email : a.email,
 												submitted : moment(a.app_data.network_application.submitted_at).format('MMM D, YYYY hh:mm A'),
 												download : api + 'network/proposal/' + a._id
 											});
-							bindRowEvents('#approve_' + a._id);
+							bindRowEvents('#id1_' + a._id.substring(0, 16));
 						});
 					})
 					.onerror(function (e) {
