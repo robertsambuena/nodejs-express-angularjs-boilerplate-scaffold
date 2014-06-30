@@ -98,8 +98,10 @@
 					street_address : user_info.contact_info.address.street_address || ''
 				});
 				_$('#edit_profile_form').addEventListener('submit', function (e) {
+
 					var form = e.target,
 						data = serialize(form);
+
 					e.preventDefault();
 
 					//validate data
@@ -116,12 +118,16 @@
 					return false;
 				}, true);
 			}
-			else
+			else {	
 				content_div.innerHTML = t('profile', {
 					name : user_info.profile_info.fname + ' ' + user_info.profile_info.lname,
 					avatar : user_info.profile_info.avatar,
 					class : user_info.class || 'Newbie'
 				});
+				if (user_info.app_data.network_application) {
+					content_div.innerHTML += '<br />Network application status : ' + user_info.app_data.network_application.status;
+				}
+			}
 		},
 		overview = function () {
 			content_div.innerHTML = t('overview');
@@ -336,7 +342,7 @@
 										subscribers : res.statistics.subscriberCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 										views : res.statistics.viewCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 										videos : res.statistics.videoCount.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-										rating : classifyChannelByViews(+res.statistics.viewCount),
+										rating : classifyChannelByViews(+res.statistics.viewCount)
 									});
 								}
 							})
@@ -499,9 +505,40 @@
 				Cookies.set('referrer_email', ctx.params.email);
 			root.location.href = '/';
 		},
+		network = function (ctx) {
+			switch (ctx.params.action) {
+				case 'apply' :
+					content_div.innerHTML = t('network_apply');
+					_$('#network_apply_form').addEventListener('submit', function (e) {
+						var files = e.target.file.files,
+							xhr = new XMLHttpRequest(),
+							formData = new FormData(),
+							temp = files[0].name.split('.');
+
+						e.preventDefault();
+
+						if (temp[temp.length - 1] !== 'pdf') {
+							return alert('Eeeeeeeeeeeenk! Only pdf files are allowed to be submitted :P');
+						}
+
+						formData.append('file', files[0]);
+
+						xhr.open('POST', api + 'network/apply', true);
+						xhr.withCredentials = true;
+						xhr.onload = function () {
+							if (xhr.status === 200)
+								alert('File upload successful');
+							else
+								alert('File upload failed');
+						};
+						xhr.send(formData);
+						return false;
+					});
+					break;
+			}
+		},
         admin = function (ctx) {
-			var dom = _$('#admin_tmpl'),
-				viewApplicant = function (ev) {
+			var viewApplicant = function (ev) {
 					var wrapper = _$('#content_div_wrapper'),
 						overlay = doc.createElement('div'),
 						fade = doc.createElement('div');
@@ -541,27 +578,40 @@
 							wrapper.removeChild(_$('#overlay'));
 							wrapper.removeChild(_$('#fade'));
 						});
-
-
+				},
+				bindRowEvents = function (id) {
+					var elem = _$(id);
+					elem.addEventListener('change', function (e) {
+						console.dir(e);
+					});
 				};
 
-			content_div.innerHTML = dom.innerHTML;
+			if (!user_info)
+				return logout();
 
-			_$('#unapproved_list_body').innerHTML = '';
 
-			if (user_info) {
+			if (!ctx.params.action || !['channel', 'network'].indexOf(~ctx.params.action))
+				return page.show('/admin/channel');
+
+			content_div.innerHTML = t('admin');
+			_$('#admin_content_div').innerHTML = t('admin_' + ctx.params.action);
+
+
+			if (ctx.params.action === 'channel') {
 				curl.get(api + 'admin/applicants')
 					.send({
 						size: ctx.params.size || 10,
 						page: ctx.params.page || 1
 					})
 					.then(function (d) {
-						var counter,
+						var dom = _$('#unapproved_list_body'),
+							counter,
 							len,
 							rows,
 							row;
 
 						if (d) {
+							dom.innerHTML = '';
 							for (counter in d) {
 								row = t('unapproved_list_tr', {
 														_id : d[counter]._id,
@@ -570,7 +620,7 @@
 														api : api
 													});
 
-								_$('#unapproved_list_body').innerHTML += row;
+								dom.innerHTML += row;
 							}
 
 							rows = _$('.view_applicant');
@@ -586,8 +636,26 @@
 					.onerror(function (e) {
 						console.log(e);
 					});
-            } else
-                logout();
+			}
+			else if (ctx.params.action === 'network') {
+				curl.get(api + 'network/networks')
+					.then(function (d) {
+						var dom = _$('#unapproved_list_body');
+						dom.innerHTML = '';
+						d.forEach(function (a) {
+							dom.innerHTML += t('proposal_list_tr', {
+												id : a._id,
+												email : a.email,
+												submitted : moment(a.app_data.network_application.submitted_at).format('MMM D, YYYY hh:mm A'),
+												download : api + 'network/proposal/' + a._id
+											});
+							bindRowEvents('#approve_' + a._id);
+						});
+					})
+					.onerror(function (e) {
+						console.dir(e);
+					});
+			}
         },
 
 
@@ -653,6 +721,9 @@
 			if (!has_class)
                 dom.innerHTML += '<li><a id="choose_a" class="button" href="/choose">Choose your class</a></li>';
 
+			if (!user_info.app_data.admin && !user_info.app_data.network_application)
+                dom.innerHTML += '<li><a id="network_apply_a" class="button" href="/network/apply">Apply for a network</a></li>';
+
 			page.show(root.location.pathname);
 		},
 
@@ -680,6 +751,7 @@
 				curl.to(api + 'user')
 					.then(function (data) {
 						user_info = data;
+						raven = user_info;
 						_$('#collapse_button').click();
 						page.show(root.location.pathname === '/'
 							? '/overview'
@@ -752,11 +824,12 @@
 	page('/about', about);
 	page('/choose/:class?', choose);
 	page('/partner', partner);
-	page('/staff', staff);
+	page('/staff/:action?', staff);
 	page('/channels/:action?', channels);
 	page('/error', error);
 	page('/prospect/:action?', prospect);
-    page('/admin/:page?/:size?', admin);
+	page('/network/:action?', network);
+    page('/admin/:action?/:page?/:size?', admin);
     page('/via/:email?', setReferrer);
 	page('*', notFound);
 
