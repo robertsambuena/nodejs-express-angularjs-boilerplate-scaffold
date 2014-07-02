@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no" />
+		<link rel="shortcut icon" href="/favicon.png" />
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.1.2/nprogress.min.css" />
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="/min.css" />
+		<title>Freedom!</title>
+		<script type="text/javascript" src="//www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load('visualization', '1.0', {packages : ['corechart']});
+		</script>
+	</head>
+
+	<body>
+		<header>
+			<div id="mast_div">
+				<img id="logo_img" href="/" src="/freedom-nav-logo.png" class="wrapper" height="33px" width="115px"/>
+				<div class="wrapper">
+					<button id="collapse_button" class="collapsed">
+						<i class="fa fa-bars fa-lg"></i><i class="fa fa-sort-asc"></i>
+					</button>
+				</div>
+				<div id="profile_nav_div"></div>
+			</div>
+		</header>
+
+		<section id="menu_section">
+			<nav>
+				<ul id="menu_ul"></ul>
+			</nav>
+		</section>
+
+		<section id="body_section">
+			<div id="content_div_wrapper">
+				<div id="content_div"></div>
+			</div>
+		</section>
+
+        <script type="text/html" id="signin_tmpl">
+            <a id="register_a" href="/register">Register</a>
+            <a id="sign_in_a" href="{api}auth/google">Sign in using Google</a>
+        </script>
+
+        <script type="text/html" id="admin_tmpl">
+
+			<div class="gplus">
+				<ul>
+					<li><a href="/admin/channel" id="channel_a">Channel Applications</a></li>
+					<li><a href="/admin/network" id="network_a">Network Applications</a></li>
+				</ul>
+			</div>
+			<div id="admin_content_div"></div>
+        </script>
+
+        <script type="text/html" id="admin_channel_tmpl">
+            <table id="unapproved">
+                <thead>
+                    <tr>
+                        <td>Link</td>
+                        <td>Channel</td>
+                        <td>Last 30 Days</td>
+                        <td>View</td>
+                    </tr>
+                </thead>
+				<tbody id="unapproved_list_body"></tbody>
+            </table>
+        </script>
+
+        <script type="text/html" id="admin_network_tmpl">
+            <table id="unapproved">
+                <thead>
+                    <tr>
+                        <td>Email</td>
+                        <td>Date Applied</td>
+                        <td>Download</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+				<tbody id="unapproved_list_body"></tbody>
+            </table>
+        </script>
+
+		<script type="text/html" id="proposal_list_tr_tmpl">
+			<tr>
+				<td>{email}</td>
+				<td>{submitted}</td>
+				<td><a class="button" href="{download}" target="_blank">Download</a></td>
+				<td>
+					<select id="id1_{id}" data-id="id2_{id2}">
+						<option value="Pending" disabled selected>Pending</option>
+						<option value="Rejected">Rejected</option>
+						<option value="Approved">Approved</option>
+					</select>
+				</td>
+			</tr>
+		</script>
+		
+		<script type="text/html" id="unapproved_list_tr_tmpl">
+			<tr>
+				<td>
+					<a href="http://www.youtube.com/channel/{_id}" target="_blank"><i class="fa fa-youtube fa-lg"></i></a>
+				</td>
+				<td>{channel_name}</td>
+				<td>{last30_days}</td>
+				<td><button value="{_id}" class="view_applicant">View</button></td>
+			</tr>
+		</script>
+
+        <script type="text/html" id="registration_tmpl">
+            <form id="registration_form">
+                Email<input type="email" name="email" value="{email}" required="required"/><br />
+                First Name<input type="text" name="fname" value="{fname}" required="required"/><br />
+                Last Name<input type="text" name="lname" value="{lname}" required="required"/><br />
+                Password<input type="text" name="password" required="required"/><br />
+                Confirm Password<input type="text" name="password2" required="required"/><br />
+                Avatar<input type="text" name="avatar" value="{avatar}"/> <br />
+                Birthdate<input type="date" name="birthdate" required="required"/> <br />
+                Skype<input type="text" name="skype" /> <br />
+                Street Address<input type="text" name="street_address" /> <br />
+                City<input type="text" name="city" /> <br />
+                State<input type="text" name="state" /> <br />
+                Country<input type="text" name="country" /> <br />
+                Postal code<input type="text" name="postal_code" /> <br />
+                Facebook<input type="text" name="facebook" /> <br />
+                Twitter<input type="text" name="twitter" /> <br />
+                Phone<input type="text" name="phone" /> <br />
+                <input type="hidden" name="google_refresh_token" value="{google_refresh_token}"/>
+                <input type="hidden" name="referrer" value="{referrer}"/>
+                <input type="submit" name="submit" value="Submit" />
+            </form>
+        </script>
+
+        <script type="text/html" id="profile_nav_tmpl">
+            <span id="profile_email_span">{email}</span>
+            <i id="bell_icon" class="fa fa-bell-o fa-lg"></i>
+            <img id="profile_avatar_img" title="Logout" src="{avatar}" width="27px" height="27px"/>
+        </script>
+
+        <script type="text/html" id="overview_tmpl">
+            This is an overview
+        </script>
+
+        <script type="text/html" id="profile_tmpl">
+            <div id="profile_div">
+                <img src="{avatar}" width="128px" height="128px" alt="{name}'s picture"/>
+                <div>
+                    <span id="profile_name_span">{name}</span><br />
+                    Badges : <br />
+                    Class : {class} <br />
+                    <a href="/profile/edit" id="edit_profile_button" class="button">Edit Profile</a>
+                </div>
+                <br class="clearfix"/>
+                <ul>
+                    <li>Info</li>
+                    <li>Class</li>
+                    <li>Recruits</li>
+                <ul>
+            </div>
+        </script>
+
+        <script type="text/html" id="edit_profile_tmpl">
+            <form id="edit_profile_form">
+                First Name<input type="text" name="fname" value="{fname}"/><br />
+                Last Name<input type="text" name="lname" value="{lname}"/><br />
+                Skype<input type="text" name="skype" value="{skype}"/> <br />
+                Street Address<input type="text" name="street_address" value="{street_address}"/> <br />
+                City<input type="text" name="city" value="{city}"/> <br />
+                State<input type="text" name="state" value="{state}"/> <br />
+                Country<input type="text" name="country" value="{country}"/> <br />
+                Postal code<input type="text" name="postal_code" value="{postal_code}"/> <br />
+                Avatar<input type="text" name="avatar" value="{avatar}"/> <br />
+                Facebook<input type="text" name="facebook" value="{facebook}"/> <br />
+                Twitter<input type="text" name="twitter" value="{twitter}"/> <br />
+                Phone<input type="text" name="phone" value="{phone}"/> <br />
+                <input type="submit" name="submit" value="Submit" />
+            </form>
+        </script>
+
+        <script type="text/html" id="choose_tmpl">
+            Choose a class
+            <br /><br /><br />
+            <a href="/choose/partner" class="button">Partner</a>
+            <br /><br /><br />
+            <a href="/choose/staff" class="button">Staff</a>
+        </script>
+
+        <script type="text/html" id="partner_contract_tmpl">
+            This is a contract for partners...
+            Lorem ipsum blablabla.
+            <br /><br /><br /><br />
+            <a href="/channels/accept" class="button">I accept</a>
+            <br /><br /><br />
+            <a href="/choose/decline" class="button">Nope</a>
+        </script>
+
+        <script type="text/html" id="staff_contract_tmpl">
+            This is a contract for staff...
+            Lorem ipsum blablabla.
+            <br /><br /><br /><br />
+            <a href="/staff/accept" class="button">I accept</a>
+            <br /><br /><br />
+            <a href="/choose/decline" class="button">Nope</a>
+        </script>
+
+        <script type="text/html" id="channels_tmpl">
+            <a href="{api}channel/add" class="button">Add Channel</a>
+            <pre>{data}</pre>
+        </script>
+
+        <script type="text/html" id="add_channel_tmpl">
+            Add this channel? :
+            <br />
+            <form id="add_channel_form">
+                <pre>{data}</pre>
+				Network (Optional) :
+                <select id="network_select" name="network_id"></select>
+                <input type="submit" value="Add" name="submit"/>
+            </form>
+        </script>
+
+        <script type="text/html" id="about_tmpl">
+            Hi im about page, and you are?
+        </script>
+
+        <script type="text/html" id="not_found_tmpl">
+            Page Not Found :(
+        </script>
+
+		<script type="text/html" id="prospect_tmpl">
+			<div id="refer_link_div">
+				Your refer-a-friend link : <br /><span>{link}</span>
+			</div>
+			<form id="search_form">
+				Search&nbsp;<input type="text" name="q" placeholder="Enter prospect's username" id="prospect_search_input"/>
+				<input type="submit" class="disappear" id="search_prospect_button"/>
+			</form>
+			<div id="prospect_result_div"></div>
+			<hr />
+			<div class="gplus blood">
+				<ul>
+					<li><a href="/prospect/Lead" id="leads_a">Leads</a></li>
+					<li><a href="/prospect/Contacted" id="contacted_a">Contacted</a></li>
+					<li><a href="/prospect/Pitched" id="pitched_a">Pitched</a></li>
+					<li><a href="/prospect/Demo" id="demo_a">Demo</a></li>
+					<li><a href="/prospect/Negotiating" id="negotiating_a">Negotiating</a></li>
+					<li><a href="/prospect/Closed (lost)" id="closed_lost_a">Closed (lost)</a></li>
+					<li><a href="/prospect/Closed (won)" id="closed_won_a">Closed (won)</a></li>
+				</ul>
+			</div>
+			<table id="prospects_table">
+				<thead>
+					<tr>
+						<th>
+							<button id="delete_prospect_button">
+								<i class="fa fa-trash-o fa-lg"></i>
+							</button>
+						</th>
+						<th>&nbsp;</th>
+						<th>Channel</th>
+						<th>Status</th>
+						<th>Note (automatically saves) </th>
+					</tr>
+				</thead>
+				<tbody id="prospect_table_tbody"></tbody>
+			</table>
+			<div id="chart_div"></div>
+		</script>
+
+		<script type="text/html" id="prospect_result_tr_tmpl">
+			<tr id="prospect_{_id}_tr">
+				<td><input type="checkbox" value="{_id}"/></td>
+				<td><img src="{thumbnail}" width="88px" height="88px"/></td>
+				<td>{owner}</td>
+				<td>
+					<select id="prospect_status_{_id}_select">
+						<option value="{_id}|Lead">Lead</option>
+						<option value="{_id}|Contacted">Contacted</option>
+						<option value="{_id}|Pitched">Pitched</option>
+						<option value="{_id}|Demo">Demo</option>
+						<option value="{_id}|Negotiating">Negotiating</option>
+						<option value="{_id}|Closed (lost)">Closed (lost)</option>
+						<option value="{_id}|Closed (won)">Closed (won)</option>
+					</select>
+				</td>
+				<td>
+					<textarea id="prospect_note_{_id}_textarea" placeholder="Add a note here..." data-id="{_id}">{note}</textarea>
+					<br />
+					<span class="prospect_time_updated_span">Updated last {updated_at}</span>
+				</td>
+			</tr>
+		</script>
+
+		<script type="text/html" id="prospect_result_tmpl">
+			<table id="prospect_result_table">
+				<tbody id="prospect_result_tbody">
+					<tr>
+						<td rowspan="2"><img src="{img}" width="88px" height="88px"/></td>
+						<td id="prospect_title_td" colspan="3">
+							{title}
+							<span id="prospect_videos_span"> {videos} videos [MCN - {scm} <span class="question_mark">?</span>]</span>
+						</td>
+						<td id="prospect_views_td">{views} <small>views</small></td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<button id="recruit_button">Add!</button>
+							<span id="prospect_subscribers_span">{subscribers} subscribers</span>
+						</td>
+						<td id="prospect_rating_td">{rating}</td>
+					</tr>
+					<tr id="other_prospects_count_tr">
+						<td colspan="5" id="other_prospects_count_td"></td>
+					</tr>
+					<tr id="other_prospects_header">
+						<td colspan="2">Recruiter</td>
+						<td>Date Recruited</td>
+						<td>Curent Status</td>
+						<td>Recruiter's Note</td>
+					</tr>
+				</tbody>
+			</table>
+		</script>
+
+		<script type="text/html" id="others_prospect_tmpl">
+			<tr class="others_prospect_tr">
+				<td colspan="2">{recruiter_email}</td>
+				<td>{created_at}</td>
+				<td>{status}</td>
+				<td>
+					{note}
+					<br />
+					<span class="prospect_time_updated_span">-- Updated last {updated_at}</span>
+				</td>
+			</tr>
+		</script>
+
+		<script type="text/html" id="network_apply_tmpl">
+			Good day young lad! You were summoned here from the inner depths of middle earth to hand over your network application.
+			<form id="network_apply_form">
+				<input type="file" name="file" required/> <br />
+				<input type="submit" value="Hand Over"/>
+			</form>
+		</script>
+
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
+		<script type="text/javascript" src="//momentjs.com/downloads/moment.min.js"></script>
+		<script type="text/javascript" src="/min.js"></script>
+	</body>
+
+</html>

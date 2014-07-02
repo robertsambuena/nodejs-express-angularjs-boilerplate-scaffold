@@ -1,0 +1,35 @@
+div.topbar .custom-brand {
+  width:100px;
+  padding:7px 7px;
+}
+div.topbar .custom-navbar {
+  background-color:#ffffff !important;
+  color:#333 !important;
+  border:0px;
+  height:50px;
+}
+.navbar-collapse {
+  height:50px;
+}
+div.topbar .custom-navbar a {
+  color:#333;
+}
+div.topbar .custom-navbar a:hover {
+  background-color:transparent!important;
+}
+div.topbar .custom-navbar .custom-nav li a {
+  padding-top:19px;
+  padding-bottom:5px;
+}
+div.topbar .custom-navbar .custom-nav a:hover > span {
+  background-color:transparent;
+  border-bottom:3px solid #cc181e;
+  padding-bottom:10px;
+}
+div.topbar .custom-navbar .custom-nav .active a > span {
+  border-bottom:3px solid #cc181e;
+  padding-bottom:10px;
+}
+div.topbar .custom-navbar .custom-nav-collapse {
+  height:50px;
+}

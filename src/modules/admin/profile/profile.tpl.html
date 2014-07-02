@@ -1,0 +1,32 @@
+<div class="profile-page row">
+	<div class="user-content">
+		<div class="user">
+			<div class="content">
+				<div class="info">
+					<a href="/{{allUsers[0].custom_url}}">
+						<img class="avatar" ng-src="{{allUsers[0].avatar}}"></img>
+						<strong class="name" ng-bind="allUsers[0].fname+' '+allUsers[0].lname"></strong>
+					</a>
+				</div>
+				<div class="badges">
+					<span>Badges</span>
+					<span class="badge" title="{{badge.text}}" ng-repeat="badge in badges" ng-style="{'background-position-x':badge.sprite[0]+'px','background-position-y':badge.sprite[1]+'px'}"></span>
+				</div>
+				<div class="options">
+					<button class="btn btn-small">Edit Profile</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="channel-content">
+		<h4>
+			Channels
+			<button type="button" class="btn btn-default btn-small">
+		  <i class="fa fa-plus"></i>
+		</button>
+		</h4>
+		<div class="channel">
+			
+		</div>
+	</div>
+</div>

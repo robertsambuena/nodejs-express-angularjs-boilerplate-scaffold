@@ -1,0 +1,21 @@
+extends layout
+block styles
+  link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap.min.css')
+  link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+  link(rel='stylesheet', href='/'+module_name+'/'+module_name+'.min.css')
+block content
+  div.topbar(ng-include="'modules/common/topbar/topbar.tpl.html'" ng-controller="menuController")
+  div.sidebar(ng-include="'modules/common/menu/menu.tpl.html'" ng-controller="menuController")
+  div.content.container(ui-view="main")
+//- load necessary scripts
+block scripts
+  script(src='/vendor/angularjs/angular.js')
+  script(src='/vendor/angularjs/angular-ui-router.min.js')
+  script(src='/vendor/angularjs/angular-route.js')
+  script(src='/vendor/angularjs/ui-bootstrap-tpls-0.11.0.min.js')
+  script(src='/vendor/localstorage/angular-local-storage.min.js')
+  script.
+    var module = '#{module_angular}.#{module_name}';
+  script(src='/'+module_name+'/'+module_name+'.templates.js')
+  script(src='/'+module_name+'/'+module_name+'.min.js')
+  

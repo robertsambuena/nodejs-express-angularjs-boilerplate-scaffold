@@ -1,0 +1,14 @@
+.sidebar {
+	position:absolute;
+	left:0px;
+	margin-top:50px;
+	width:200px;
+	display:inline-block;
+}
+.sidebar .menu-container {
+	width:200px;
+}
+.sidebar .menu-container .nav {
+	height:50px;
+	width:200px;
+}
