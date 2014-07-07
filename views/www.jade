@@ -4,12 +4,14 @@ block styles
   link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
   link(rel='stylesheet', href='/'+module_name+'/'+module_name+'.min.css')
 block content
-  div.content.container(ui-view="main")
-  div.
-    #{get}
-  div.
-    #{post}
-    
+  div.container
+    div(style="font-size:140px").
+      FREEDOM!
+    br
+    br
+    a(href=backend+"/google_auth").
+      Sign in with Google
+    div.content.container(ui-view="main")
 //- load necessary scripts
 block scripts
   script(src='/vendor/angularjs/angular.js')

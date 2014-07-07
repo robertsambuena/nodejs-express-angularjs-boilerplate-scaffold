@@ -29,7 +29,7 @@ app.use('/users', users);
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
-    next(err);
+    next(req);
 });
 
 /// error handlers
@@ -56,8 +56,8 @@ app.use(function(err, req, res, next) {
     });
 });
 
-app.listen(3000, function(){
-    console.log('listening to localhost:3000');
+app.listen(8000, function() {
+    console.log('Listening to localhost:8000');
 });
 
 module.exports = app;

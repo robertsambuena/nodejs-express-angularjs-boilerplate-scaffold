@@ -2,7 +2,6 @@ angular.module( 'ui.freedom.user', [
   'userdashboard.profile',
   'userdashboard.overview',
   'userdashboard.config',
-  'userdashboard.authentication',
   'template-module'
 ])
 .config( function ( $stateProvider, $urlRouterProvider, $httpProvider) {

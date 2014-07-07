@@ -1,0 +1,66 @@
+.profile-page {
+ margin:0 0;
+ padding:9px 12px 9px 12px;
+}
+.profile-page .user-content, .profile-page .channel-content {
+	min-height:150px;
+	background-color:#ffffff;
+	box-shadow: 0 1px 2px rgba(0,0,0,.1);
+ -moz-box-sizing: border-box;
+ box-sizing: border-box;
+ margin-bottom:12px;
+}
+.profile-page .user-content .user {
+ position:relative;
+ display:block;
+ width:600px;
+ padding:9px 12px 9px 12px;
+}
+.profile-page .user-content .user .content {
+  margin-left:110px;
+  margin-right:110px;
+  height:100px;
+
+}
+.profile-page .user-content .user .content .info .name {
+  font-size:20px;
+  margin-top: 15px;
+  line-height:30px;
+}
+.profile-page .user-content .user .content .info .avatar {
+  float: left;
+  margin-left: -110px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.profile-page .user-content .user .content .badges {
+  height:30px;
+}
+.profile-page .user-content .user .content .badges span {
+  vertical-align: middle;
+  height: 30px;
+  display: inline-block;
+}
+.profile-page .user-content .user .content .options {
+  height:30px;
+  margin-top:10px;
+}
+
+.profile-page .user-content .user .content .badges span.badge {
+  display:inline-block;
+  background-image:url(samplebadges.jpg);
+  /*background-position:0px 0px;*/
+  width: 30px;
+  height: 30px;
+  background-size : 580% 300%;
+}
+  
+.profile-page .channel-content h4 {
+  padding:9px 12px 9px 12px;
+  border-bottom:1px solid #e6e6e6;
+}
+.profile-page .channel-content .channel {
+  
+}

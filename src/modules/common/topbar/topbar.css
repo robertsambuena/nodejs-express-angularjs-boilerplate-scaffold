@@ -1,12 +1,21 @@
 div.topbar .custom-brand {
-  width:100px;
+  width:180px;
   padding:7px 7px;
+}
+div.topbar .custom-brand img {
+  width:120px;
+}
+div.topbar .main-menu-btn .fa {
+  font-size:23px;
 }
 div.topbar .custom-navbar {
   background-color:#ffffff !important;
   color:#333 !important;
   border:0px;
   height:50px;
+}
+div.topbar .custom-navbar-right {
+  
 }
 .navbar-collapse {
   height:50px;

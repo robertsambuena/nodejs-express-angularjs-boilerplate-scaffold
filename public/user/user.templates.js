@@ -1,46 +1,60 @@
 angular.module('template-module', []).run(['$templateCache', function($templateCache) {
-  $templateCache.put("modules/user/authentication/login.tpl.html",
-    "<div class=\"profile-container\">\n" +
-    "Login\n" +
-    "<form ng-submit=\"login(credential)\" ng-init=\"credential={}\">\n" +
-    "	<input type=\"text\" ng-model=\"credential.uname\" placeholder=\"username\"></input>\n" +
-    "	<input type=\"text\" ng-model=\"credential.pass\" placeholder=\"password\"></input>\n" +
-    "	<input type=\"submit\" value=\"SUBMIT\"></input>\n" +
-    "</form>\n" +
-    "<div ui-sref-active=\"active\">\n" +
-    "	<a href=\"#/register\">Register</a>\n" +
-    "</div>\n" +
-    "</div>");
-  $templateCache.put("modules/user/authentication/register.tpl.html",
-    "<div class=\"profile-container\">\n" +
-    "	<div class=\"container\">\n" +
-    "		<div class=\"col-lg-4\" ng-init=\"error={};registerInfo={}\">\n" +
-    "			<h4>REGISTER</h4>\n" +
-    "			<div class=\"alert alert-danger\" role=\"alert\" ng-show=\"error.id\">\n" +
-    "				{{error.message}}\n" +
+  $templateCache.put("modules/admin/home/home.tpl.html",
+    "{{pageTitle}}");
+  $templateCache.put("modules/admin/profile/profile.tpl.html",
+    "<div class=\"profile-page row\">\n" +
+    "	<div class=\"user-content\">\n" +
+    "		<div class=\"user\">\n" +
+    "			<div class=\"content\">\n" +
+    "				<div class=\"info\">\n" +
+    "					<a href=\"/{{allUsers[0].custom_url}}\">\n" +
+    "						<img class=\"avatar\" ng-src=\"{{allUsers[0].avatar}}\"></img>\n" +
+    "						<strong class=\"name\" ng-bind=\"allUsers[0].fname+' '+allUsers[0].lname\"></strong>\n" +
+    "					</a>\n" +
+    "				</div>\n" +
+    "				<div class=\"badges\">\n" +
+    "					<span>Badges</span>\n" +
+    "					<span class=\"badge\" title=\"{{badge.text}}\" ng-repeat=\"badge in badges\" ng-style=\"{'background-position-x':badge.sprite[0]+'px','background-position-y':badge.sprite[1]+'px'}\"></span>\n" +
+    "				</div>\n" +
+    "				<div class=\"options\">\n" +
+    "					<button class=\"btn btn-small\">Edit Profile</button>\n" +
+    "				</div>\n" +
     "			</div>\n" +
-    "			<div class=\"alert alert-danger\" role=\"alert\" ng-show=\"success.id\">\n" +
-    "				<p>{{success.message}} <a href=\"#/login\">here</a>.</p>\n" +
-    "			</div>\n" +
-    "			<form ng-submit=\"register(registerInfo)\">\n" +
-    "				<input class=\"form-control margin1\" required type=\"text\" ng-model=\"registerInfo.fname\" placeholder=\"Firstname\"></input>\n" +
-    "				<input class=\"form-control margin1\" required type=\"text\" ng-model=\"registerInfo.lname\" placeholder=\"Lastname\"></input>\n" +
-    "				<input class=\"form-control margin1\" required type=\"text\" ng-model=\"registerInfo.hobbies\" placeholder=\"Hobbies\"></input>\n" +
-    "				<input class=\"form-control margin1\" required type=\"text\" ng-model=\"registerInfo.crush\" placeholder=\"First crush\"></input>\n" +
-    "				<input class=\"form-control margin1\" required type=\"text\" ng-model=\"registerInfo.uname\" placeholder=\"username\" ng-class=\"{'has-error':error.id=='userexist'}\"></input>\n" +
-    "				<input class=\"form-control margin1\" required type=\"text\" ng-model=\"registerInfo.pass\" placeholder=\"password\"></input>\n" +
-    "				<input class=\"form-control margin1\" type=\"submit\" value=\"SUBMIT\"></input>\n" +
-    "			</form>\n" +
-    "			<!-- <pre>{{registerInfo | json}}</pre> -->\n" +
+    "		</div>\n" +
+    "	</div>\n" +
+    "	<div class=\"channel-content\">\n" +
+    "		<h4>\n" +
+    "			Channels\n" +
+    "			<button type=\"button\" class=\"btn btn-default btn-small\">\n" +
+    "		  <i class=\"fa fa-plus\"></i>\n" +
+    "		</button>\n" +
+    "		</h4>\n" +
+    "		<div class=\"channel\">\n" +
+    "			\n" +
     "		</div>\n" +
     "	</div>\n" +
     "</div>");
-  $templateCache.put("modules/user/home/home.tpl.html",
-    "WELCOME {{user.fname}} {{user.lname}}");
-  $templateCache.put("modules/user/profile/profile.tpl.html",
-    "<div class=\"profile-container\">\n" +
-    "Profile\n" +
-    "</div>");
+  $templateCache.put("modules/auth/login/template.tpl.html",
+    "<input></input>");
+  $templateCache.put("modules/auth/register/template.tpl.html",
+    "<div class=\"container col-lg-6\">\n" +
+    "	<form ng-submit=\"register(userinfo)\">\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.email\" placeholder=\"email\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.lname\" placeholder=\"lname\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.fname\" placeholder=\"fname\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.birthdate\" placeholder=\"birthdate\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.skype\" placeholder=\"skype\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.street_address\" placeholder=\"street_address\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.city\" placeholder=\"city\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.state\" placeholder=\"state\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.country\" placeholder=\"country\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.postal_code\" placeholder=\"postal_code\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.avatar\" placeholder=\"avatar\"></input>\n" +
+    "		<input class=\"form-control\" type=\"text\" ng-model=\"userinfo.referrer\" placeholder=\"referrer\"></input>\n" +
+    "		<input class=\"form-control\" type=\"button\" value=\"Proceed\"></input>\n" +
+    "	</form>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("modules/common/menu/menu.tpl.html",
     "<!-- <div class=\"menu-container\">\n" +
     "  <ul class=\"nav nav-pills nav-stacked\">\n" +
@@ -127,21 +141,25 @@ angular.module('template-module', []).run(['$templateCache', function($templateC
     "        <span class=\"icon-bar\"></span>\n" +
     "        <span class=\"icon-bar\"></span>\n" +
     "      </button>\n" +
-    "      <a class=\"navbar-brand custom-brand\" href=\"#\">\n" +
-    "      	<!-- <img src=\"/images/frdm-nav-logo.png\"></img> -->\n" +
-    "        <i class=\"fa fa-bars\"></i>\n" +
+    "      <a class=\"navbar-brand custom-brand\" href=\"\">\n" +
+    "      	<img src=\"/images/frdm-nav-logo.png\"></img>\n" +
     "      </a>\n" +
+    "      <a class=\"navbar-brand main-menu-btn\" href=\"\">\n" +
+    "        <i class=\"fa fa-bars\"></i>\n" +
+    "      </a>  \n" +
     "    </div>\n" +
     "    <div collapse=\"navCollapsed\" class=\"custom-nav-collapse navbar-collapse collapse\">\n" +
-    "      <ul class=\"custom-nav nav navbar-nav navbar-left\">\n" +
+    "      <!-- <ul class=\"custom-nav nav navbar-nav navbar-left\">\n" +
     "        <li ui-sref-active=\"active\"><a ui-sref=\"home\"><span>Overview</span></a></li>\n" +
     "        <li ui-sref-active=\"active\"><a ui-sref=\"profile\"><span>Profile</span></a></li>\n" +
     "        <li ui-sref-active=\"active\"><a ui-sref=\"about\"><span>About</span></a></li>\n" +
     "        <li ui-sref-active=\"active\"><a ui-sref=\"others\"><span>Help</span></a></li>\n" +
-    "      </ul>\n" +
-    "      <ul class=\"nav navbar-nav navbar-right\">\n" +
+    "      </ul> -->\n" +
+    "      <ul class=\"nav navbar-nav navbar-right custom-navbar-right\">\n" +
     "        <li ui-sref-active=\"active\" class=\"dropdown\">\n" +
-    "          <a ui-sref=\"other\" class=\"dropdown-toggle  cursor-pointer\" data-toggle=\"dropdown\">Dropdown <b class=\"caret\"></b></a>\n" +
+    "          <a ui-sref=\"other\" class=\"dropdown-toggle  cursor-pointer\" data-toggle=\"dropdown\">\n" +
+    "            <img ng-src=\"\"></img>\n" +
+    "            <b class=\"caret\"></b></a>\n" +
     "          <ul class=\"dropdown-menu\">\n" +
     "            <li><a href=\"#\">Action</a></li>\n" +
     "            <li><a href=\"#\">Another action</a></li>\n" +
@@ -156,19 +174,11 @@ angular.module('template-module', []).run(['$templateCache', function($templateC
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n" +
-    "<!-- <nav class=\"big-btn-wrapper\">\n" +
-    "  <button class=\"big-nav-btn\">\n" +
-    "    <i class=\"fa fa-bars\"></i>\n" +
-    "  </button>\n" +
-    "</nav>\n" +
-    "<header class=\"big-header\">\n" +
-    "  <div class=\"header-wrapper\">\n" +
-    "    <div class=\"header-title\">\n" +
-    "      <span class=\"section-title\">Freedom!</span>\n" +
-    "      <span class=\"chapter-title\">Introduction</span>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</header>\n" +
-    "\n" +
-    " -->");
+    "");
+  $templateCache.put("modules/user/home/home.tpl.html",
+    "WELCOME {{user.fname}} {{user.lname}}");
+  $templateCache.put("modules/user/profile/profile.tpl.html",
+    "<div class=\"profile-container\">\n" +
+    "Profile\n" +
+    "</div>");
 }]);

@@ -12,7 +12,7 @@ angular.module('userdashboard.overview', [])
   });
 })
 
-.controller( 'homeController', function ( $scope, localStorageService ) {  
+.controller( 'homeController', function ( $scope, localStorageService ) {
   $scope.user = localStorageService.get("currentUser");
 })
 ;

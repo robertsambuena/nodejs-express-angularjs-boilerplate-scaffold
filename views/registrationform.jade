@@ -5,11 +5,7 @@ block styles
   link(rel='stylesheet', href='/'+module_name+'/'+module_name+'.min.css')
 block content
   div.content.container(ui-view="main")
-  div.
-    #{get}
-  div.
-    #{post}
-    
+  
 //- load necessary scripts
 block scripts
   script(src='/vendor/angularjs/angular.js')
@@ -17,6 +13,8 @@ block scripts
   script(src='/vendor/angularjs/angular-route.js')
   script(src='/vendor/angularjs/ui-bootstrap-tpls-0.11.0.min.js')
   script(src='/vendor/localstorage/angular-local-storage.min.js')
+  script.
+    var return_val = '!{JSON.stringify(return_val)}';
   script.
     var module = '#{module_angular}.#{module_name}';
   script(src='/'+module_name+'/'+module_name+'.templates.js')

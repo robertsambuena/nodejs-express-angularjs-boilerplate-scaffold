@@ -4,12 +4,9 @@ block styles
   link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
   link(rel='stylesheet', href='/'+module_name+'/'+module_name+'.min.css')
 block content
+  div.topbar(ng-include="'modules/common/topbar/topbar.tpl.html'" ng-controller="menuController")
+  div.sidebar(ng-include="'modules/common/menu/menu.tpl.html'" ng-controller="menuController")
   div.content.container(ui-view="main")
-  div.
-    #{get}
-  div.
-    #{post}
-    
 //- load necessary scripts
 block scripts
   script(src='/vendor/angularjs/angular.js')
